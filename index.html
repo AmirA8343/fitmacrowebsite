@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FitMacro Technologies Inc.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="FitMacro Technologies Inc. builds AI-powered nutrition and health tools, including the FitMacro app for accurate macro tracking from food photos."
+  />
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-elevated: #020617;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.1);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --card: #020617;
+      --danger: #f97373;
+      --radius-xl: 1.5rem;
+      --radius-lg: 1rem;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at top, #111827 0, #020617 46%, #020617 100%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 4rem;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(3, 7, 18, 0.95),
+        rgba(3, 7, 18, 0.8),
+        transparent
+      );
+      border-bottom: 1px solid rgba(31, 41, 55, 0.7);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #4ade80, #16a34a, #16a34a 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.3),
+        0 10px 25px rgba(34, 197, 94, 0.35);
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #020617;
+    }
+
+    .brand-text-main {
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 1rem;
+    }
+
+    .brand-text-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      transition: all 0.18s ease-out;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.82rem;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top left, #111827 0, #020617 50%);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
+      border-color: rgba(75, 85, 99, 1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-color: rgba(16, 185, 129, 0.6);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 16px 40px rgba(16, 185, 129, 0.65);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding-top: 3.5rem;
+      padding-bottom: 3.5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      }
+    }
+
+    .hero-kicker {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .hero-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.7);
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 3.2vw + 1.8rem, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-highlight {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-highlight::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 -0.1rem 0;
+      height: 28%;
+      background: rgba(34, 197, 94, 0.17);
+      filter: blur(4px);
+      pointer-events: none;
+      z-index: -1;
+      border-radius: 999px;
+    }
+
+    .hero-subtitle {
+      max-width: 32rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-subtitle strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.4rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .dot-muted {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.8);
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top, #0b1120 0, #020617 55%);
+      border-radius: 1.75rem;
+      padding: 1.6rem 1.5rem;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(
+        circle at 10% 0,
+        rgba(59, 130, 246, 0.18),
+        transparent 55%
+      );
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .hero-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-chip {
+      font-size: 0.72rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.16);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .metric {
+      padding: 0.8rem 0.75rem;
+      border-radius: 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(30, 64, 175, 0.9);
+    }
+
+    .metric-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .metric-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .hero-preview {
+      margin-top: 0.4rem;
+      padding: 0.9rem 0.85rem;
+      border-radius: 1.1rem;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px dashed rgba(51, 65, 85, 1);
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .hero-preview strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-preview-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .preview-pill {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 1);
+      color: var(--muted);
+    }
+
+    /* Sections */
+    section {
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-top: 1px solid rgba(31, 41, 55, 0.8);
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .section-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .section-description {
+      font-size: 0.95rem;
+      max-width: 32rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .split {
+      display: grid;
+      gap: 1.8rem;
+    }
+
+    @media (min-width: 900px) {
+      .split {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #020617 0, #020617 56%);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 1);
+      padding: 1.6rem 1.5rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 1);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.9rem;
+    }
+
+    .card-list {
+      list-style: none;
+      font-size: 0.88rem;
+      color: var(--muted);
+      display: grid;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-list li::before {
+      content: "•";
+      color: var(--accent);
+      display: inline-block;
+      width: 1rem;
+      margin-left: -1rem;
+    }
+
+    .card-tagline {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    .two-column-list {
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    @media (min-width: 700px) {
+      .two-column-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .feature-bullet {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .feature-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 800px) {
+      .contact-grid {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      }
+    }
+
+    .contact-list {
+      list-style: none;
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .contact-list li span {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .contact-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.7rem;
+    }
+
+    .contact-card-mini {
+      border-radius: var(--radius-lg);
+      border: 1px dashed rgba(55, 65, 81, 0.9);
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+      margin-top: 0.8rem;
+    }
+
+    footer {
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 1.4rem 1.5rem 2rem;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 0.8rem;
+      backdrop-filter: blur(10px);
+      background: radial-gradient(circle at top, #020617 0, #020617 70%);
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 720px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-cta {
+        display: none;
+      }
+      .hero {
+        padding-top: 2.3rem;
+      }
+      .container {
+        padding-inline: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="logo-circle">FM</div>
+          <div>
+            <div class="brand-text-main">FitMacro Technologies Inc.</div>
+            <div class="brand-text-sub">Nutrition · AI · Health</div>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="#products">Products</a>
+          <a href="#technology">Technology</a>
+          <a href="#company">Company</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="nav-cta">
+          <span class="badge">Canada · Health Tech</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-grid">
+            <div>
+              <div class="hero-kicker">
+                <span class="hero-kicker-dot"></span>
+                AI-Native Nutrition Company
+              </div>
+              <h1 class="hero-title">
+                Building <span class="hero-highlight">precise macro tracking</span>
+                for the real world.
+              </h1>
+              <p class="hero-subtitle">
+                FitMacro Technologies Inc. is a Canada-based health technology company.
+                Our flagship app, <strong>FitMacro</strong>, uses computer vision and AI
+                to turn everyday meals into accurate calories and macros — from photos
+                and text — in seconds.
+              </p>
+              <div class="hero-cta-row">
+                <!-- TODO: Replace # links with your real store URLs -->
+                <a class="btn btn-primary" href="https://apps.apple.com/app/fitmacro/id6753078641
+" target="_blank" rel="noopener">
+                  <span class="btn-icon"></span>
+                  <span>Download on the App Store</span>
+                </a>
+                <a class="btn btn-outline" href="#contact">
+                  <span>Business & partnership inquiries</span>
+                </a>
+              </div>
+              <div class="hero-meta">
+                <span><span class="dot-muted"></span> Made in Canada</span>
+                <span><span class="dot-muted"></span> Privacy-first, no data reselling</span>
+                <span><span class="dot-muted"></span> Built for everyday people & athletes</span>
+              </div>
+            </div>
+
+            <aside class="hero-card" aria-label="FitMacro insight preview">
+              <div class="hero-card-header">
+                <div>
+                  <div class="hero-card-title">FitMacro Snapshot</div>
+                </div>
+                <div class="hero-chip">AI Nutrition Engine</div>
+              </div>
+              <div class="hero-metrics">
+                <div class="metric">
+                  <div class="metric-label">Per Meal</div>
+                  <div class="metric-value">Exact macros</div>
+                  <div class="metric-sub">
+                    Computer vision + verified food databases
+                  </div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">Languages</div>
+                  <div class="metric-value">11+</div>
+                  <div class="metric-sub">
+                    Built for global users from day one
+                  </div>
+                </div>
+              </div>
+              <div class="hero-preview">
+                <strong>How it works:</strong> Users snap a photo or describe their meal.
+                Our AI estimates nutrition with high precision, logs it automatically,
+                and supports coaching in multiple languages.
+                <div class="hero-preview-pill-row">
+                  <span class="preview-pill">Photo → Macros in seconds</span>
+                  <span class="preview-pill">Multi-language AI coaching</span>
+                  <span class="preview-pill">Macro & calorie tracking</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="products">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-eyebrow">Products</div>
+            <h2 class="section-title">FitMacro — AI-powered macro tracking app</h2>
+            <p class="section-description">
+              Our flagship product helps users track calories and macros accurately
+              without manual searching and guessing. Designed for cutting, maintaining,
+              and lean bulking — from beginners to serious lifters.
+            </p>
+          </div>
+
+          <div class="split">
+            <div class="card">
+              <div class="pill-row">
+                <span class="pill">AI food recognition</span>
+                <span class="pill">Photo & text input</span>
+                <span class="pill">Macro tracking</span>
+              </div>
+              <h3 class="card-title">For everyday users & athletes</h3>
+              <p class="card-body">
+                FitMacro combines computer vision, verified food databases, and custom
+                prompts to estimate nutrition with high precision. Users can track
+                their meals, macros, and progress without spending minutes on every
+                plate of food.
+              </p>
+              <ul class="card-list">
+                <li>Instant nutrition from photos and text descriptions</li>
+                <li>Daily calorie and macro goals for cut, maintain, or gain</li>
+                <li>Multi-language interface and AI coaching</li>
+                <li>History of meals and progress over time</li>
+              </ul>
+              <p class="card-tagline">
+                Available on iOS. Android and additional tools are planned as the
+                platform grows.
+              </p>
+            </div>
+
+            <div class="two-column-list" aria-label="Key product features">
+              <div class="feature-item">
+                <div class="feature-bullet">✓</div>
+                <div class="feature-text">
+                  <strong>Accurate photo analysis</strong><br />
+                  Uses AI + high-quality datasets to estimate nutrition for real-world meals, not just ideal stock photos.
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-bullet">✓</div>
+                <div class="feature-text">
+                  <strong>Macro-focused</strong><br />
+                  Tracks protein, carbs, fats, and calories so users can align daily meals with their training goals.
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-bullet">✓</div>
+                <div class="feature-text">
+                  <strong>AI coaching</strong><br />
+                  Offers guidance and explanations directly in the app, helping users understand how to eat for their goals.
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-bullet">✓</div>
+                <div class="feature-text">
+                  <strong>Built for global users</strong><br />
+                  Support for multiple languages so users can track and chat with the AI coach in the language they are most comfortable with.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="technology">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-eyebrow">Technology & Approach</div>
+            <h2 class="section-title">AI native, privacy-first, practical</h2>
+            <p class="section-description">
+              FitMacro Technologies Inc. builds on top of modern AI models, computer
+              vision, and structured prompts, combined with trusted nutrition databases.
+              Our focus is real-world accuracy and user trust, not selling data.
+            </p>
+          </div>
+
+          <div class="split">
+            <div class="card">
+              <div class="pill-row">
+                <span class="pill">AI & computer vision</span>
+                <span class="pill">Structured prompt design</span>
+                <span class="pill">Nutrition databases</span>
+              </div>
+              <h3 class="card-title">How it works under the hood</h3>
+              <p class="card-body">
+                Our backend orchestrates image analysis, structured JSON prompts, and
+                external nutrition data sources to generate consistent and transparent
+                macro estimates. The system is designed for extensibility — from new
+                food types to future integrations.
+              </p>
+              <ul class="card-list">
+                <li>Layered AI prompts tailored for nutrition use-cases</li>
+                <li>Integration with high-quality food databases</li>
+                <li>Careful error handling and user-facing transparency</li>
+                <li>Architecture ready for future health-data integrations</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Data protection & user trust</h3>
+              <p class="card-body">
+                We design FitMacro with a simple idea: your data is about your health,
+                not our ads. Our goal is to handle user information carefully and
+                transparently, and to keep improving our protections as we grow.
+              </p>
+              <ul class="card-list">
+                <li>We focus on using data to improve user experience and accuracy</li>
+                <li>No data reselling to third-party advertisers</li>
+                <li>Clear in-app messaging about how information is used</li>
+                <li>Planned future improvements to permissions and controls</li>
+              </ul>
+              <p class="card-tagline">
+                For detailed information, please refer to the official privacy policy
+                and terms once they are published on this site.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="company">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-eyebrow">Company</div>
+            <h2 class="section-title">About FitMacro Technologies Inc.</h2>
+            <p class="section-description">
+              FitMacro Technologies Inc. is a Canadian company focused on building
+              practical AI tools for nutrition and health. We are product-led and
+              obsessed with real-world results, not just demos.
+            </p>
+          </div>
+
+          <div class="split">
+            <div>
+              <ul class="card-list">
+                <li>Incorporated in Canada as FitMacro Technologies Inc.</li>
+                <li>Operates remotely with a strong connection to users and gyms in Canada</li>
+                <li>Focused on nutrition, body composition, and long-term health outcomes</li>
+                <li>Building a portfolio of tools around the FitMacro ecosystem</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 class="card-title">What we’re building next</h3>
+              <p class="card-body">
+                Over time, our vision is to expand beyond tracking into coaching and
+                deeper health insights — while staying simple enough for everyday use.
+              </p>
+              <ul class="card-list">
+                <li>Richer analytics for progress and adherence</li>
+                <li>Smarter AI coaching around habits and lifestyle</li>
+                <li>Deeper integration with health and fitness ecosystems</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-eyebrow">Contact</div>
+            <h2 class="section-title">Business & partnership inquiries</h2>
+            <p class="section-description">
+              For collaboration, press, partnerships, or support related to FitMacro,
+              please use the contact information below.
+            </p>
+          </div>
+
+          <div class="contact-grid">
+            <div>
+              <ul class="contact-list">
+                <!-- TODO: Replace placeholders with your real info -->
+                <li>
+  <span>Email:</span>
+  <a href="mailto:fitmacro14@gmail.com">fitmacro14@gmail.com</a>
+</li>
+
+                <li>
+                  <span>Company name:</span> FitMacro Technologies Inc.
+                </li>
+                <li>
+                  <span>Location:</span> Canada
+                </li>
+              </ul>
+              <p class="contact-note">
+                Please do not send any medical emergencies via email. For urgent
+                health issues, contact your local emergency services or healthcare
+                provider.
+              </p>
+            </div>
+            <div>
+              <div class="contact-card-mini">
+                <strong>Important:</strong> FitMacro and any related tools are not a
+                substitute for professional medical advice, diagnosis, or treatment.
+                Users should always consult a qualified healthcare professional
+                regarding nutrition, training, and health decisions.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>© 2025 FitMacro Technologies Inc. · Built in Canada.</div>
+        <div class="footer-links">
+          <!-- TODO: point these to your real docs when ready -->
+          <a href="privacy.html">Privacy Policy</a>
+           <a href="terms.html">Terms of Use</a>
+
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
