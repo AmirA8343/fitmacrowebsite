@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FitMacros Links</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #030712;
+      --card: #020617;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #020617, #030712);
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+    }
+
+    a.button {
+      display: block;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 15px;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    a.button:hover {
+      background: #020625;
+      transform: translateY(-2px);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #020617;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FitMacros</h1>
+    <p>AI-powered nutrition & health tracking</p>
+
+    <a class="button primary"
+       href="https://apps.apple.com/app/fitmacro/id6753078641">
+      📱 Download on App Store
+    </a>
+
+    <a class="button" href="https://fitmacro.ca">
+      🌐 Website
+    </a>
+
+    <a class="button" href="https://tiktok.com/@fitmacros5">
+      🎵 TikTok
+    </a>
+
+    <a class="button" href="info@fitmacro.ca">
+      📩 Contact Support
+    </a>
+
+    <div class="footer">
+      © FitMacro Technologies Inc.
+    </div>
+  </div>
+</body>
+</html>
