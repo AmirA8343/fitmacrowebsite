@@ -4,15 +4,152 @@
   <meta charset="UTF-8" />
   <title>Calorie Counter App – Track Calories & Macros | FitMacro</title>
 
-  <meta name="description"
-    content="FitMacro is a calorie counter app that helps you track calories, protein, carbs, and fat using AI-powered food recognition and photo logging." />
+  <meta
+    name="description"
+    content="FitMacro is a calorie counter app that helps you track calories, protein, carbs, and fat using AI-powered food recognition and photo logging."
+  />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-elevated: #020617;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --radius: 1rem;
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0%, #020617 55%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(3, 7, 18, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+    }
+
+    .logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #020617;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    p,
+    li {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    ul {
+      margin-left: 1.2rem;
+      margin-top: 0.8rem;
+    }
+
+    .cta {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #020617;
+      font-weight: 600;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
 </head>
 
 <body>
-  <main style="max-width: 800px; margin: 80px auto; padding: 0 20px; font-family: system-ui;">
-    
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo">FM</div>
+        <span>FitMacro</span>
+      </div>
+      <a href="/">Home</a>
+    </div>
+  </header>
+
+  <main>
     <h1>Calorie Counter App for Accurate Macro Tracking</h1>
 
     <p>
@@ -23,8 +160,8 @@
 
     <p>
       Unlike traditional calorie trackers, FitMacro uses AI and computer vision
-      to analyze meals, reduce manual entry, and improve consistency for everyday users
-      and athletes.
+      to analyze meals, reduce manual entry, and improve consistency for everyday
+      users and athletes.
     </p>
 
     <h2>Why use FitMacro as your calorie tracker?</h2>
@@ -35,11 +172,14 @@
       <li>Built for real-world meals</li>
     </ul>
 
-    <p>
-      <a href="https://apps.apple.com/your-app-link" target="_blank">
-        Download FitMacro on the App Store
-      </a>
-    </p>
+    <a
+      class="cta"
+      href="https://apps.apple.com/app/fitmacro/id6753078641"
+      target="_blank"
+      rel="noopener"
+    >
+      Download on the App Store
+    </a>
 
     <h2>Frequently Asked Questions</h2>
 
@@ -51,10 +191,13 @@
 
     <h3>Is FitMacro a calorie tracker app?</h3>
     <p>
-      Yes. FitMacro is a calorie tracker and macro tracking app designed for accurate,
-      fast, and simple nutrition logging.
+      Yes. FitMacro is a calorie tracker and macro tracking app designed for
+      accurate, fast, and simple nutrition logging.
     </p>
-
   </main>
+
+  <footer>
+    © 2025 FitMacro Technologies Inc. · Built in Canada
+  </footer>
 </body>
 </html>
