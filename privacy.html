@@ -51,7 +51,7 @@
 <hr>
 
 <h2>1. Plain-English Summary</h2>
-<p>FitMacros stores almost all your data <strong>locally on your device only</strong>. We do not store your meals, nutrition logs, fitness data, goals, favorites, or progress history on any backend server. Meal photos are uploaded temporarily for AI analysis and deleted immediately after processing. We store <strong>only hashed, non-reversible identifiers</strong> (device hash + account hash) to prevent repeated free trial abuse.</p>
+<p>FitMacros stores most detailed meal, nutrition, and progress data <strong>locally on your device</strong>. Meal photos are uploaded temporarily for AI analysis and deleted immediately after processing. If you use the optional FitMacro + FitFace AI ecosystem features, we also sync a limited set of account-linked summary fields to our backend, such as your linked account ID, email, goals, calorie/protein targets, calories logged, protein logged, and meals logged. We store <strong>only hashed, non-reversible identifiers</strong> for free-trial abuse prevention, separate from these optional ecosystem features.</p>
 <p>We never sell your data. We do not use your information for targeted advertising. FitMacros does not provide medical advice.</p>
 
 <h2>2. Data We Collect</h2>
@@ -65,7 +65,7 @@
 
   <li><strong>Fitness Data (Local Only):</strong> Any workout entries, fitness notes, or manually entered fitness information. FitMacros does not use Apple HealthKit or Google Fit.</li>
 
-  <li><strong>Daily, Weekly & Monthly Progress Data (Local Only):</strong> We calculate daily totals (calories, protein, carbs, fats) and use them to generate weekly and monthly charts.</li>
+  <li><strong>Daily, Weekly & Monthly Progress Data (Mostly Local):</strong> We calculate daily totals (calories, protein, carbs, fats) and use them to generate weekly and monthly charts. If you use the optional FitMacro + FitFace AI ecosystem features, limited daily summary fields such as calories logged, protein logged, and meals logged may also be synced to our backend.</li>
 
   <li><strong>Progress Retention:</strong> Progress older than <strong>3 months</strong> is automatically deleted from your device.</li>
 
@@ -76,9 +76,9 @@
   <li><strong>Diagnostics:</strong> Crash logs, performance data, and basic usage analytics to improve reliability.</li>
 </ul>
 
-<h2>3. Local Storage Only</h2>
+<h2>3. Local Storage and Optional Ecosystem Sync</h2>
 <p>
-  FitMacros stores all of the following <strong>locally on your device only</strong>:
+  FitMacros stores the following detailed data <strong>locally on your device</strong>:
 </p>
 <ul>
   <li>Meals and meal history</li>
@@ -89,7 +89,8 @@
   <li>Goals</li>
 </ul>
 
-<p>We do not host or sync this data to external servers. If you delete the app or reset your device storage, this data is permanently removed.</p>
+<p>We do not host your full meal history, favorites, or detailed local progress logs on a general backend server. However, if you use the optional FitMacro + FitFace AI ecosystem features, we may sync a limited set of account-linked profile fields and daily summary fields to our backend so the two apps can show shared context, recommendations, and next-step guidance. If you delete the app or reset your device storage, your local-only data is permanently removed from that device.</p>
+<p>The ecosystem sync may include your linked account ID, email, goal, calorie target, protein target, calories logged, protein logged, meals logged, and related fit/wellness summary timestamps. It does <strong>not</strong> send your full local meal history or meal photos through this sync.</p>
 
 <h2>4. How We Use Your Data</h2>
 <ul>
@@ -99,6 +100,7 @@
   <li>To provide customer support</li>
   <li>To prevent repeated free trial usage through anonymous hashed identifiers</li>
   <li>To debug, secure, and improve app quality</li>
+  <li>To provide optional cross-app ecosystem features between FitMacros and FitFace AI</li>
 </ul>
 
 <p><strong>AI Accuracy:</strong> AI estimates may be inaccurate. FitMacros does not provide medical or nutritional advice.</p>
@@ -119,6 +121,7 @@
   <li><strong>RevenueCat:</strong> Subscription management.</li>
   <li><strong>Apple App Store:</strong> Billing and receipt validation.</li>
   <li><strong>Crash/Analytics Tools:</strong> Error logs and performance diagnostics.</li>
+  <li><strong>Our Ecosystem Backend:</strong> Receives limited account-linked profile and daily summary fields when you use the optional FitMacros + FitFace AI ecosystem features.</li>
 </ul>
 
 <p><strong>We do not sell your data.</strong> We do not share data for targeted or cross-app advertising.</p>
@@ -130,6 +133,8 @@
   <li><strong>Meal Photos:</strong> Deleted immediately after AI analysis.</li>
 
   <li><strong>Meals, Fitness Logs, Goals:</strong> Stored locally until you delete them or uninstall the app.</li>
+
+  <li><strong>Ecosystem Summary Data:</strong> Limited account-linked profile fields and daily summary fields may be retained on our backend while the optional FitMacros + FitFace AI ecosystem features remain active.</li>
 
   <li><strong>Progress Data:</strong> Automatically deleted after <strong>3 months</strong> to protect privacy.</li>
 
