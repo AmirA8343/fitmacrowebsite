@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fitmacro.ca/sitemap.xml
+Sitemap: https://www.fitmacro.ca/sitemap.xml

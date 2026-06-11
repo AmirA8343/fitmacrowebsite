@@ -1,83 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fitmacro.ca/</loc>
+    <loc>https://www.fitmacro.ca/</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/apps.html</loc>
+    <loc>https://www.fitmacro.ca/apps</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/calorie-counter.html</loc>
+    <loc>https://www.fitmacro.ca/calorie-counter</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/macro-tracker-app.html</loc>
+    <loc>https://www.fitmacro.ca/macro-tracker-app</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/expense-atlas.html</loc>
+    <loc>https://www.fitmacro.ca/expense-atlas</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/expense-tracker-app.html</loc>
+    <loc>https://www.fitmacro.ca/expense-tracker-app</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/tinywins.html</loc>
+    <loc>https://www.fitmacro.ca/tinywins</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/habit-tracker-app.html</loc>
+    <loc>https://www.fitmacro.ca/habit-tracker-app</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/gigbalance.html</loc>
+    <loc>https://www.fitmacro.ca/gigbalance</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/gig-income-tracker-app.html</loc>
+    <loc>https://www.fitmacro.ca/gig-income-tracker-app</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/gigbalanceprivacy.html</loc>
+    <loc>https://www.fitmacro.ca/gigbalanceprivacy</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/gigbalanceterms.html</loc>
+    <loc>https://www.fitmacro.ca/gigbalanceterms</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/privacy.html</loc>
+    <loc>https://www.fitmacro.ca/privacy</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/terms.html</loc>
+    <loc>https://www.fitmacro.ca/terms</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/delete-data</loc>
+    <loc>https://www.fitmacro.ca/delete-data</loc>
     <lastmod>2026-05-12</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/expenseatlasprivacy.html</loc>
+    <loc>https://www.fitmacro.ca/expenseatlasprivacy</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/tinywinprivacy.html</loc>
+    <loc>https://www.fitmacro.ca/tinywinprivacy</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/tinywinterms.html</loc>
+    <loc>https://www.fitmacro.ca/tinywinterms</loc>
     <lastmod>2026-02-24</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/runengine-terms.html</loc>
+    <loc>https://www.fitmacro.ca/runengine-terms</loc>
     <lastmod>2026-06-02</lastmod>
   </url>
   <url>
-    <loc>https://fitmacro.ca/runengine-privacy.html</loc>
+    <loc>https://www.fitmacro.ca/runengine-privacy</loc>
     <lastmod>2026-06-02</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fitmacro.ca/fitfaceai-privacy-policy</loc>
+    <lastmod>2026-06-11</lastmod>
   </url>
 </urlset>
