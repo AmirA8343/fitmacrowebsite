@@ -132,6 +132,10 @@
       Download on App Store
     </a>
 
+    <a id="googlePlayLink" class="button primary" href="https://play.google.com/store/apps/details?id=com.fitmacrotechnologies.fitmacro">
+      Get it on Google Play
+    </a>
+
     <a id="websiteLink" class="button" href="https://www.fitmacro.ca">
       Website
     </a>
@@ -193,8 +197,15 @@
         ct: source + '_' + campaign
       });
 
+      var googlePlayUrl = withParams('https://play.google.com/store/apps/details?id=com.fitmacrotechnologies.fitmacro', {
+        utm_source: source,
+        utm_medium: medium,
+        utm_campaign: campaign
+      });
+
       document.getElementById('websiteLink').href = websiteUrl;
       document.getElementById('appStoreLink').href = appStoreUrl;
+      document.getElementById('googlePlayLink').href = googlePlayUrl;
 
       var base = window.location.origin + window.location.pathname;
       var channels = [
