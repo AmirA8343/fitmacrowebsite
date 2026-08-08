@@ -63,24 +63,6 @@
       color: #021412;
       border: 0;
     }
-    .examples {
-      margin-top: 22px;
-      text-align: left;
-      background: rgba(8, 22, 19, 0.72);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .examples strong { display: block; color: #d1d5db; font-size: 0.8rem; margin-bottom: 8px; }
-    .examples a {
-      display: block;
-      color: #7dd3fc;
-      font-size: 0.78rem;
-      margin-bottom: 6px;
-      word-break: break-all;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
     .footer { margin-top: 18px; color: var(--muted); font-size: 0.8rem; }
   </style>
 </head>
@@ -94,13 +76,6 @@
     <a id="googlePlayLink" class="button primary" href="https://play.google.com/store/apps/details?id=com.gigworkerexpense.mobile">Get it on Google Play</a>
     <a id="websiteLink" class="button" href="https://www.fitmacro.ca/gigbalance">Product page</a>
     <a class="button" href="mailto:info@fitmacro.ca">Contact support</a>
-
-    <div class="examples">
-      <strong>Use one link in each social profile:</strong>
-      <a id="tiktokUrl" href="#"></a>
-      <a id="youtubeUrl" href="#"></a>
-      <a id="instagramUrl" href="#"></a>
-    </div>
 
     <div class="footer">&copy; FitMacro Technologies Inc.</div>
   </main>
@@ -137,21 +112,6 @@
         utm_source: source,
         utm_medium: medium,
         utm_campaign: campaign
-      });
-
-      [
-        { id: 'tiktokUrl', source: 'tiktok' },
-        { id: 'youtubeUrl', source: 'youtube' },
-        { id: 'instagramUrl', source: 'instagram' }
-      ].forEach(function (item) {
-        var url = withParams(window.location.origin + window.location.pathname, {
-          src: item.source,
-          medium: 'social',
-          campaign: 'gigbalance_links'
-        });
-        var el = document.getElementById(item.id);
-        el.href = url;
-        el.textContent = item.source + ': ' + url;
       });
     })();
   </script>
