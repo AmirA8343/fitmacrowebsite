@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.fitmacro.ca/sitemap.xml
+Sitemap: https://www.fitmacro.ca/blog/sitemap.xml

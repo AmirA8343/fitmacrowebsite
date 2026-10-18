@@ -1,4 +1,13 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/blog", "destination": "/api/blog?locale=en" },
+    { "source": "/blog/sitemap.xml", "destination": "/api/blog?format=sitemap" },
+    { "source": "/blog/:slug", "destination": "/api/blog?locale=en&slug=:slug" },
+    { "source": "/es/blog", "destination": "/api/blog?locale=es" },
+    { "source": "/es/blog/:slug", "destination": "/api/blog?locale=es&slug=:slug" },
+    { "source": "/fr/blog", "destination": "/api/blog?locale=fr" },
+    { "source": "/fr/blog/:slug", "destination": "/api/blog?locale=fr&slug=:slug" }
+  ]
 }
