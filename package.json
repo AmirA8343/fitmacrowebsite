@@ -1,6 +1,7 @@
 {
   "name": "fitmacro-website",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "node scripts/verify-blog.mjs && tsc --noEmit",
     "typecheck": "tsc --noEmit"
