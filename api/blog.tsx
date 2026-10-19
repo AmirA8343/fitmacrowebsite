@@ -7,7 +7,7 @@ type Translation = { slug: string; title: string; description: string; body: str
 type Article = Translation & { published_at: string; translations?: Partial<Record<"es" | "fr", Translation>> };
 
 const origin = "https://www.fitmacro.ca";
-const ios = "https://apps.apple.com/us/app/fitmacro-ai-calorie-counter/id6753078641";
+const ios = "https://apps.apple.com/us/app/fitmacro-ai-calorie-counter/id6787710350";
 const android = "https://play.google.com/store/apps/details?id=com.fitmacrotechnologies.fitmacro";
 const labels = {
   en: { articles: "Articles", heading: "FitMacro guides", intro: "Practical nutrition, calorie tracking and healthy habit guides.", all: "All articles", download: "Track your nutrition with FitMacro", ios: "Download for iPhone", android: "Get it on Android", empty: "No articles have been published yet." },
