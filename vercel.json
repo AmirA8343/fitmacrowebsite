@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/blog", "destination": "/api/blog?locale=en" },
     { "source": "/blog/sitemap.xml", "destination": "/api/blog?format=sitemap" },
