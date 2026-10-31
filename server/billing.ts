@@ -47,7 +47,7 @@ export async function revenueCat(uid: string | null): Promise<{ tier: Access['ti
   if (!response.ok) throw new AccessError(503, 'Subscription status could not be checked. Please try again.');
   const data = await response.json();
   if (!data?.subscriber || typeof data.subscriber.entitlements !== 'object') throw new AccessError(503, 'Subscription status is unavailable.');
-  const tier = subscriptionTier(data.subscriber, Date.now(), process.env.REVENUECAT_ALLOW_SANDBOX === 'true' && process.env.VERCEL_ENV !== 'production');
+  const tier = subscriptionTier(data.subscriber, Date.now(), process.env.REVENUECAT_ALLOW_SANDBOX === 'true');
   const management = data.subscriber.management_url;
   return { tier, ...(typeof management === 'string' && management.startsWith('https://') ? { managementUrl: management } : {}) };
 }
@@ -56,7 +56,7 @@ export function checkoutUrl(uid: string) {
   if (!configured) throw new AccessError(503, 'Web subscriptions are being prepared. You can keep using free analyses and manual logging.', 'checkout_unavailable');
   const url = new URL(configured);
   if (url.protocol !== 'https:' || url.hostname !== 'pay.rev.cat' || url.search || url.hash || !/^\/(?:sandbox\/)?[A-Za-z0-9_-]+\/?$/.test(url.pathname)) throw new AccessError(503, 'Web checkout has not been configured correctly.');
-  if (url.pathname.startsWith('/sandbox/') && process.env.VERCEL_ENV === 'production') throw new AccessError(503, 'Sandbox checkout is available only in Preview or local testing.');
+  if (url.pathname.startsWith('/sandbox/') && process.env.REVENUECAT_ALLOW_SANDBOX !== 'true') throw new AccessError(503, 'Sandbox checkout requires REVENUECAT_ALLOW_SANDBOX=true.');
   url.pathname = `${url.pathname.replace(/\/$/, '')}/${encodeURIComponent(uid)}`;
   return url.toString();
 }

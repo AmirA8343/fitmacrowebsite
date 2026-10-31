@@ -27,10 +27,14 @@ assert.equal(subscriptionTier({ entitlements: { premium: { expires_date: null } 
 assert.throws(() => checkoutUrl('user-1'));
 process.env.REVENUECAT_PURCHASE_LINK = 'https://pay.rev.cat/example-token';
 assert.equal(checkoutUrl('firebase uid/+'), 'https://pay.rev.cat/example-token/firebase%20uid%2F%2B');
+process.env.REVENUECAT_ALLOW_SANDBOX = 'true';
 process.env.REVENUECAT_PURCHASE_LINK = 'https://pay.rev.cat/sandbox/example-token';
 assert.equal(checkoutUrl('firebase uid/+'), 'https://pay.rev.cat/sandbox/example-token/firebase%20uid%2F%2B');
 process.env.VERCEL_ENV = 'production';
+assert(checkoutUrl('user').includes('/sandbox/example-token/user'));
+process.env.REVENUECAT_ALLOW_SANDBOX = 'false';
 assert.throws(() => checkoutUrl('user'));
+process.env.REVENUECAT_ALLOW_SANDBOX = 'true';
 process.env.VERCEL_ENV = 'preview';
 assert(checkoutUrl('user').includes('/sandbox/example-token/user'));
 delete process.env.VERCEL_ENV;

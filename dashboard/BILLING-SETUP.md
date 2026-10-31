@@ -38,7 +38,7 @@ Firebase references: [Verify ID tokens](https://firebase.google.com/docs/auth/ad
 
 ## Verify before enabling payments
 
-Use a separate staging/sandbox Web Purchase Link and enable `REVENUECAT_ALLOW_SANDBOX=true` only for local/staging tests. Sandbox entitlements are rejected in Vercel production even if that flag is accidentally true. Never distribute a sandbox checkout link to real customers.
+To test on your existing domain, set `REVENUECAT_PURCHASE_LINK` to the sandbox base link and `REVENUECAT_ALLOW_SANDBOX=true`, then redeploy. No separate Vercel Preview is required. To launch live billing, replace the link with the production base link, set `REVENUECAT_ALLOW_SANDBOX=false`, and redeploy. The server secret API key stays the same; this hosted checkout integration does not use a public Web SDK key.
 
 Test a free account, a paid iOS account, a paid Android account, and a web purchase under the same Firebase UID. Confirm the web purchase unlocks the expected entitlement after signing into each mobile app. Check expiry/cancellation, billing grace, checkout cancellation, refund state, and subscription management in the provider sandbox. No test here creates a charge or proves live payment-provider setup.
 
