@@ -3,11 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/verify-blog.mjs && tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "build": "node scripts/verify-blog.mjs && tsc --noEmit && npm run build:dashboard",
+    "typecheck": "tsc --noEmit && tsc --project dashboard/tsconfig.json",
+    "build:dashboard": "tsc --project dashboard/tsconfig.json && node scripts/build-dashboard.mjs",
+    "dev:dashboard": "node scripts/build-dashboard.mjs --serve",
+    "test:dashboard": "node scripts/test-dashboard.mjs && node scripts/test-nutrition.mjs && node scripts/test-meal-result.mjs && node scripts/test-billing.mjs"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^7.11.6",
     "@vercel/node": "^5.3.25",
+    "firebase": "^12.6.0",
+    "firebase-admin": "^13.10.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -15,6 +21,7 @@
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "esbuild": "^0.27.0",
     "typescript": "^5.9.3"
   }
 }

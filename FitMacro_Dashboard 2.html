@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitMacro - Nutrition & Fitness Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0eaff',
+                            500: '#4361ee',
+                            600: '#3a0ca3',
+                            700: '#2b0980',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans h-full antialiased flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Navigation / Header -->
+    <header class="w-full bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-md mx-auto px-5 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <h1 class="text-2xl font-bold tracking-tight text-white">FitMacro</h1>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="openSettingsModal()" class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 hover:bg-slate-700 transition active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-md mx-auto px-4 py-5 space-y-5 flex-1 overflow-y-auto pb-24">
+        
+        <!-- Date Subheader -->
+        <div class="flex justify-between items-center px-1">
+            <span id="current-date-label" class="text-sm font-medium text-slate-400">Friday, October 30</span>
+            <div class="flex bg-slate-900 rounded-full p-0.5 border border-slate-800 text-xs font-semibold">
+                <button class="px-3 py-1 rounded-full bg-blue-600 text-white shadow-sm transition">Overview</button>
+                <button onclick="switchTab('nutrients')" class="px-3 py-1 rounded-full text-slate-400 hover:text-slate-200 transition">All Nutrients</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Hero Card: Calories & Macros -->
+        <div class="bg-slate-900 rounded-3xl p-5 shadow-sm border border-slate-800 relative overflow-hidden">
+            <div class="text-xs font-semibold text-blue-400 tracking-wide uppercase mb-1">Good morning</div>
+            
+            <div class="flex items-center justify-between mt-1">
+                <div>
+                    <div class="text-2xl font-bold tracking-tight text-white">
+                        <span id="consumed-calories">0</span> / <span id="target-calories">1,800</span> <span class="text-lg font-semibold text-slate-400">kcal</span>
+                    </div>
+                </div>
+
+                <!-- Circular Progress Ring Container -->
+                <div class="relative w-20 h-20 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                        <path class="text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                        <path id="calorie-ring-path" class="text-blue-500 transition-all duration-700 ease-out" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span id="ring-consumed-text" class="text-base font-bold text-white">0</span>
+                        <span class="text-[10px] uppercase font-semibold text-slate-400">kcal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Protein Bar -->
+            <div class="mt-4 space-y-1.5">
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-slate-300">Protein</span>
+                    <span class="text-slate-400"><span id="consumed-protein">0</span> / <span id="target-protein">140</span>g</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="protein-bar" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Carbs Bar -->
+            <div class="mt-3 space-y-1.5">
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-slate-300">Carbs</span>
+                    <span class="text-slate-400"><span id="consumed-carbs">0</span> / <span id="target-carbs">225</span>g</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="carbs-bar" class="bg-amber-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Subcards -->
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-800">
+                <div class="bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LEFT</div>
+                    <div id="protein-left-label" class="text-sm font-bold text-slate-200 mt-0.5">140g protein</div>
+                </div>
+                <div class="bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">CALORIES</div>
+                    <div id="calories-left-label" class="text-sm font-bold text-slate-200 mt-0.5">1800 kcal</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Access Section -->
+        <div class="space-y-3">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="text-base font-bold text-white">Quick Access</h2>
+                <button onclick="showToast('More options coming soon!')" class="text-slate-400 hover:text-slate-200 text-sm">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Log Meal Card (Primary Action) -->
+                <button onclick="openLogMealModal()" class="col-span-1 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-3xl text-left flex flex-col justify-between shadow-md shadow-blue-500/10 transition active:scale-[0.98] group relative overflow-hidden">
+                    <div class="absolute -right-3 -bottom-3 text-blue-500/20 text-5xl pointer-events-none group-hover:scale-110 transition">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white mb-6">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-base leading-snug">Log Meal</div>
+                        <div class="text-xs text-blue-100 font-medium mt-0.5">Track foods & macros</div>
+                    </div>
+                </button>
+
+                <!-- Meal History Card -->
+                <button onclick="openHistoryModal()" class="col-span-1 bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-3xl text-left flex flex-col justify-between border border-slate-800 shadow-sm transition active:scale-[0.98]">
+                    <div class="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
+                        <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-base leading-snug text-white">Meal History</div>
+                        <div class="text-xs text-slate-400 font-medium mt-0.5">View past logs</div>
+                    </div>
+                </button>
+
+                <!-- Meal Plan Card -->
+                <button onclick="openMealPlanModal()" class="col-span-1 bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-3xl text-left flex flex-col justify-between border border-slate-800 shadow-sm transition active:scale-[0.98]">
+                    <div class="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
+                        <i class="fa-solid fa-bullseye text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-base leading-snug text-white">Meal Plan</div>
+                        <div class="text-xs text-slate-400 font-medium mt-0.5">Custom diet target</div>
+                    </div>
+                </button>
+
+                <!-- Meal Prep Card -->
+                <button onclick="openMealPrepModal()" class="col-span-1 bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-3xl text-left flex flex-col justify-between border border-slate-800 shadow-sm transition active:scale-[0.98]">
+                    <div class="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
+                        <i class="fa-solid fa-utensils text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-base leading-snug text-white">Meal Prep</div>
+                        <div class="text-xs text-slate-400 font-medium mt-0.5">Recipes & guides</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Fitness Mode Card (Full Width) -->
+            <button onclick="openFitnessModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-3xl text-left flex items-center justify-between border border-slate-800 shadow-sm transition active:scale-[0.98]">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
+                        <i class="fa-solid fa-chart-line text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-base text-white">Fitness Mode</div>
+                        <div class="text-xs text-slate-400 font-medium">Sync workouts & burn rate</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-600 pr-2"></i>
+            </button>
+        </div>
+
+        <!-- Meals Today Section -->
+        <div class="space-y-3 pt-2">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="text-base font-bold text-white">Meals Today</h2>
+                <span id="meal-count-badge" class="text-xs font-semibold text-slate-400">Nothing logged yet</span>
+            </div>
+
+            <div id="meals-today-container" class="bg-slate-900 rounded-3xl p-6 text-center border border-slate-800 shadow-sm space-y-3">
+                <div class="text-xs text-slate-400 font-medium">Start the day with a first meal so your targets and coaching stay accurate.</div>
+                <button onclick="openLogMealModal()" class="w-full py-3.5 px-4 rounded-2xl border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 font-bold text-sm transition shadow-sm active:scale-95">
+                    + Log first meal
+                </button>
+            </div>
+        </div>
+
+        <!-- Protein Gap Priority Card -->
+        <div class="bg-slate-900 rounded-3xl p-5 border border-slate-800 shadow-sm space-y-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="font-bold text-white text-base">Close your protein gap</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">In FitMacro, add <span id="protein-target-reminder">140</span>g protein to support recovery and lean-body goals.</p>
+                </div>
+                <span class="text-[10px] font-bold bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full uppercase tracking-wider">One clear priority</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 pt-1">
+                <div class="bg-slate-950 p-2.5 rounded-2xl text-center border border-slate-800">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase">Protein left</div>
+                    <div id="summary-protein-left" class="text-xs font-bold text-slate-200 mt-0.5">140g</div>
+                </div>
+                <div class="bg-slate-950 p-2.5 rounded-2xl text-center border border-slate-800">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase">Carbs left</div>
+                    <div id="summary-carbs-left" class="text-xs font-bold text-slate-200 mt-0.5">225g</div>
+                </div>
+                <div class="bg-slate-950 p-2.5 rounded-2xl text-center border border-slate-800">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase">Fat left</div>
+                    <div id="summary-fat-left" class="text-xs font-bold text-slate-200 mt-0.5">60g</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Floating Navigation Bar / Bottom Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-3 px-6 z-20">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <button onclick="openAiChatModal()" class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition active:scale-95">
+                <i class="fa-solid fa-robot text-lg"></i>
+            </button>
+            <button onclick="openLogMealModal()" class="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition active:scale-95 text-xl">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL: Log Meal -->
+    <div id="log-meal-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center sm:p-4 hidden transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-[32px] sm:rounded-3xl p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto transform transition-transform">
+            
+            <!-- Modal Header -->
+            <div class="text-center space-y-1 relative pb-1">
+                <button onclick="closeLogMealModal()" class="absolute right-0 top-0 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="text-[11px] font-bold text-blue-400 uppercase tracking-widest">Quick Capture</div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Log Meal</h3>
+                <p class="text-xs text-slate-400">Add a new meal by typing a description or taking a photo</p>
+            </div>
+
+            <!-- Quick Capture Mode Selector Tabs -->
+            <div class="grid grid-cols-2 gap-2.5">
+                <button type="button" onclick="setCaptureMode('text')" id="mode-btn-text" class="p-3 rounded-2xl border border-blue-500 bg-blue-600 text-white font-semibold text-xs flex items-center justify-center space-x-2 transition shadow-md shadow-blue-500/20">
+                    <i class="fa-solid fa-align-left text-sm"></i>
+                    <span>Text</span>
+                </button>
+                <button type="button" onclick="setCaptureMode('scan')" id="mode-btn-scan" class="p-3 rounded-2xl border border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-800 font-semibold text-xs flex items-center justify-center space-x-2 transition">
+                    <i class="fa-solid fa-barcode text-sm"></i>
+                    <span>Scan</span>
+                </button>
+                <button type="button" onclick="setCaptureMode('camera')" id="mode-btn-camera" class="p-3 rounded-2xl border border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-800 font-semibold text-xs flex items-center justify-center space-x-2 transition">
+                    <i class="fa-solid fa-camera text-sm"></i>
+                    <span>Camera</span>
+                </button>
+                <button type="button" onclick="setCaptureMode('photos')" id="mode-btn-photos" class="p-3 rounded-2xl border border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-800 font-semibold text-xs flex items-center justify-center space-x-2 transition">
+                    <i class="fa-solid fa-image text-sm"></i>
+                    <span>Photos</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Input Container -->
+            <div id="capture-content-container" class="space-y-4 pt-1">
+                <!-- Text Mode Content -->
+                <div id="capture-mode-text" class="space-y-3">
+                    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-white">Describe your meal</label>
+                            <span class="text-[10px] text-slate-500">Keep it short & specific</span>
+                        </div>
+                        <textarea id="ai-meal-description" rows="3" placeholder="Describe your meal..." class="w-full bg-transparent text-white placeholder-slate-600 text-sm focus:outline-none resize-none"></textarea>
+                        <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-900">
+                            Example: "Grilled chicken with rice and vegetables"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan Mode Content -->
+                <div id="capture-mode-scan" class="hidden space-y-3 py-6 text-center bg-slate-950 rounded-3xl border border-slate-800">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 mx-auto flex items-center justify-center text-lg mb-2">
+                        <i class="fa-solid fa-barcode"></i>
+                    </div>
+                    <div class="font-bold text-sm text-white">Barcode Scanner</div>
+                    <p class="text-xs text-slate-400 max-w-xs mx-auto">Point your camera at a food barcode to instantly log nutrition facts.</p>
+                </div>
+
+                <!-- Camera Mode Content -->
+                <div id="capture-mode-camera" class="hidden space-y-3 py-6 text-center bg-slate-950 rounded-3xl border border-slate-800">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 mx-auto flex items-center justify-center text-lg mb-2">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <div class="font-bold text-sm text-white">Snap a Photo</div>
+                    <p class="text-xs text-slate-400 max-w-xs mx-auto">Take a photo of your plate for AI instant macro estimation.</p>
+                </div>
+
+                <!-- Photos Mode Content -->
+                <div id="capture-mode-photos" class="hidden space-y-3 py-6 text-center bg-slate-950 rounded-3xl border border-slate-800">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 mx-auto flex items-center justify-center text-lg mb-2">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                    <div class="font-bold text-sm text-white">Choose from Gallery</div>
+                    <p class="text-xs text-slate-400 max-w-xs mx-auto">Select a meal photo from your library to analyze.</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons Footer -->
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="closeLogMealModal()" class="w-full py-3.5 rounded-2xl bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-300 font-bold text-sm transition active:scale-98">
+                    Cancel
+                </button>
+                <button type="button" onclick="submitQuickCaptureMeal()" class="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/20 transition active:scale-98">
+                    + Add Meal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Settings / Targets -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 space-y-5 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white">Nutrition Targets</h3>
+                <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="handleSettingsSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Target Calories (kcal)</label>
+                    <input type="number" id="setting-target-calories" required value="1800" class="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500 font-medium text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Target Protein (g)</label>
+                    <input type="number" id="setting-target-protein" required value="140" class="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500 font-medium text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Target Carbs (g)</label>
+                    <input type="number" id="setting-target-carbs" required value="225" class="w-full px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500 font-medium text-sm">
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition">
+                    Update Targets
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Meal History & Favorites -->
+    <div id="history-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center sm:p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-[32px] sm:rounded-3xl p-6 space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                        <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">Meal History & Favorites</h3>
+                        <p class="text-[11px] text-slate-400">View logs, delete, or save to favorites</p>
+                    </div>
+                </div>
+                <button onclick="closeHistoryModal()" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div id="history-modal-content" class="flex-1 overflow-y-auto space-y-4 py-1 pr-1 text-sm">
+                <!-- Dynamically populated -->
+            </div>
+
+            <button onclick="closeHistoryModal()" class="w-full py-3 rounded-2xl bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-300 font-bold text-xs transition">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL: AI Coach Chat -->
+    <div id="ai-chat-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center sm:p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-[32px] sm:rounded-3xl p-6 space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">FitMacro AI Coach</h3>
+                        <p class="text-[11px] text-slate-400">Ask about your macros & meal ideas</p>
+                    </div>
+                </div>
+                <button onclick="closeAiChatModal()" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 py-2 pr-1 text-sm max-h-[50vh]">
+                <div class="bg-slate-800 text-slate-200 p-3.5 rounded-2xl rounded-tl-sm text-xs leading-relaxed max-w-[85%]">
+                    Hello! I'm your FitMacro AI assistant. How can I help you reach your protein and calorie goals today?
+                </div>
+            </div>
+
+            <form onsubmit="handleAiChatSubmit(event)" class="flex gap-2 pt-2 border-t border-slate-800">
+                <input type="text" id="ai-chat-input" placeholder="Ask e.g. High protein dinner ideas..." class="flex-1 px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500 text-xs font-medium">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-2xl font-bold text-xs shadow-sm transition">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-5 py-3 rounded-2xl text-xs font-semibold shadow-xl z-50 transition-all duration-300 opacity-0 pointer-events-none border border-slate-700">
+        Notification message
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management
+        let appState = {
+            targetCalories: 1800,
+            targetProtein: 140,
+            targetCarbs: 225,
+            targetFat: 60,
+            meals: []
+        };
+
+        let currentCaptureMode = 'text';
+
+        function openLogMealModal() {
+            document.getElementById('log-meal-modal').classList.remove('hidden');
+        }
+
+        function closeLogMealModal() {
+            document.getElementById('log-meal-modal').classList.add('hidden');
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function openAiChatModal() {
+            document.getElementById('ai-chat-modal').classList.remove('hidden');
+        }
+
+        function closeAiChatModal() {
+            document.getElementById('ai-chat-modal').classList.add('hidden');
+        }
+
+        function openHistoryModal() {
+            showToast("Meal History view coming soon!");
+        }
+
+        function openMealPlanModal() {
+            showToast("Meal Plan view coming soon!");
+        }
+
+        function openMealPrepModal() {
+            showToast("Meal Prep view coming soon!");
+        }
+
+        function openFitnessModal() {
+            showToast("Fitness Mode sync coming soon!");
+        }
+
+        function switchTab(tab) {
+            if (tab === 'nutrients') {
+                showToast("All Nutrients view coming soon!");
+            }
+        }
+
+        function setCaptureMode(mode) {
+            currentCaptureMode = mode;
+            ['text', 'scan', 'camera', 'photos'].forEach(m => {
+                const btn = document.getElementById(`mode-btn-${m}`);
+                const content = document.getElementById(`capture-mode-${m}`);
+                if (m === mode) {
+                    btn.className = "p-3 rounded-2xl border border-blue-500 bg-blue-600 text-white font-semibold text-xs flex items-center justify-center space-x-2 transition shadow-md shadow-blue-500/20";
+                    content.classList.remove('hidden');
+                } else {
+                    btn.className = "p-3 rounded-2xl border border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-800 font-semibold text-xs flex items-center justify-center space-x-2 transition";
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        function submitQuickCaptureMeal() {
+            if (currentCaptureMode === 'text') {
+                const descInput = document.getElementById('ai-meal-description');
+                const desc = descInput.value.trim();
+                if (!desc) {
+                    showToast("Please enter a meal description!");
+                    return;
+                }
+                
+                // Realistic AI Nutrition Estimation Logic
+                let cal = 400, pro = 25, carb = 30, fat = 12;
+                const lower = desc.toLowerCase();
+
+                if (lower.includes('egg')) {
+                    let countMatch = lower.match(/(\d+)\s*egg/);
+                    let count = countMatch ? parseInt(countMatch[1]) : 1;
+                    cal = count * 72;
+                    pro = count * 6.3;
+                    carb = count * 0.4;
+                    fat = count * 4.8;
+                } else if (lower.includes('apple')) {
+                    let countMatch = lower.match(/(\d+)\s*apple/);
+                    let count = countMatch ? parseInt(countMatch[1]) : 1;
+                    cal = count * 95;
+                    pro = count * 0.5;
+                    carb = count * 25;
+                    fat = count * 0.3;
+                } else if (lower.includes('chicken breast') || lower.includes('chicken')) {
+                    cal = 310; pro = 54; carb = 0; fat = 6;
+                } else if (lower.includes('salad')) {
+                    cal = 280; pro = 15; carb = 12; fat = 14;
+                } else if (lower.includes('steak') || lower.includes('beef')) {
+                    cal = 580; pro = 48; carb = 0; fat = 24;
+                } else if (lower.includes('oatmeal') || lower.includes('pancake')) {
+                    cal = 350; pro = 12; carb = 58; fat = 7;
+                } else if (lower.includes('rice')) {
+                    cal = 240; pro = 5; carb = 52; fat = 2;
+                } else {
+                    cal = Math.min(700, Math.max(200, desc.length * 15));
+                    pro = Math.round(cal * 0.20 / 4);
+                    carb = Math.round(cal * 0.55 / 4);
+                    fat = Math.round(cal * 0.25 / 9);
+                }
+
+                appState.meals.push({
+                    id: Date.now(),
+                    name: desc,
+                    calories: Math.round(cal),
+                    protein: Math.round(pro * 10) / 10,
+                    carbs: Math.round(carb * 10) / 10,
+                    fat: Math.round(fat * 10) / 10
+                });
+
+                descInput.value = '';
+                closeLogMealModal();
+                updateDashboard();
+                showToast(`AI successfully analyzed & logged "${desc}"!`);
+            } else {
+                // Simulate scan / camera / photos recognition
+                const names = ["Grilled Salmon & Rice", "Avocado Toast & Eggs", "Protein Power Bowl"];
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                appState.meals.push({
+                    id: Date.now(),
+                    name: randomName,
+                    calories: 510,
+                    protein: 42,
+                    carbs: 45,
+                    fat: 16
+                });
+                closeLogMealModal();
+                updateDashboard();
+                showToast(`AI recognized & logged "${randomName}"!`);
+            }
+        }
+
+        // Handle Settings Submission
+        function handleSettingsSubmit(e) {
+            e.preventDefault();
+            appState.targetCalories = parseInt(document.getElementById('setting-target-calories').value) || 1800;
+            appState.targetProtein = parseInt(document.getElementById('setting-target-protein').value) || 140;
+            appState.targetCarbs = parseInt(document.getElementById('setting-target-carbs').value) || 225;
+            
+            document.getElementById('target-calories').textContent = appState.targetCalories.toLocaleString();
+            document.getElementById('target-protein').textContent = appState.targetProtein;
+            document.getElementById('target-carbs').textContent = appState.targetCarbs;
+            document.getElementById('protein-target-reminder').textContent = appState.targetProtein;
+            
+            closeSettingsModal();
+            updateDashboard();
+            showToast("Targets updated successfully!");
+        }
+
+        // Delete Meal
+        function deleteMeal(id) {
+            appState.meals = appState.meals.filter(m => m.id !== id);
+            updateDashboard();
+            showToast("Meal removed.");
+        }
+
+        // Update Dashboard UI & Calculations
+        function updateDashboard() {
+            let totalCal = 0;
+            let totalPro = 0;
+            let totalCarb = 0;
+            let totalFat = 0;
+
+            appState.meals.forEach(m => {
+                totalCal += m.calories;
+                totalPro += m.protein;
+                totalCarb += m.carbs;
+                totalFat += m.fat;
+            });
+
+            // Update texts
+            document.getElementById('consumed-calories').textContent = totalCal.toLocaleString();
+            document.getElementById('ring-consumed-text').textContent = totalCal;
+            document.getElementById('consumed-protein').textContent = totalPro;
+            document.getElementById('consumed-carbs').textContent = totalCarb;
+
+            // Left calculations
+            let proteinLeft = Math.max(0, appState.targetProtein - totalPro);
+            let caloriesLeft = Math.max(0, appState.targetCalories - totalCal);
+            let carbsLeft = Math.max(0, appState.targetCarbs - totalCarb);
+            let fatLeft = Math.max(0, appState.targetFat - totalFat);
+
+            document.getElementById('protein-left-label').textContent = `${proteinLeft}g protein`;
+            document.getElementById('calories-left-label').textContent = `${caloriesLeft} kcal`;
+            document.getElementById('summary-protein-left').textContent = `${proteinLeft}g`;
+            document.getElementById('summary-carbs-left').textContent = `${carbsLeft}g`;
+            document.getElementById('summary-fat-left').textContent = `${fatLeft}g`;
+
+            // Progress Bars Percentages
+            let proteinPct = Math.min(100, Math.round((totalPro / appState.targetProtein) * 100));
+            let carbsPct = Math.min(100, Math.round((totalCarb / appState.targetCarbs) * 100));
+            
+            document.getElementById('protein-bar').style.width = `${proteinPct}%`;
+            document.getElementById('carbs-bar').style.width = `${carbsPct}%`;
+
+            // Calorie Ring SVG stroke-dasharray calculation (Circumference ~ 100)
+            let calPct = Math.min(100, Math.round((totalCal / appState.targetCalories) * 100));
+            document.getElementById('calorie-ring-path').setAttribute('stroke-dasharray', `${calPct}, 100`);
+
+            // Meals Today List Rendering
+            const container = document.getElementById('meals-today-container');
+            const badge = document.getElementById('meal-count-badge');
+
+            if(appState.meals.length === 0) {
+                badge.textContent = "Nothing logged yet";
+                container.className = "bg-slate-900 rounded-3xl p-6 text-center border border-slate-800 shadow-sm space-y-3";
+                container.innerHTML = `
+                    <div class="text-xs text-slate-400 font-medium">Start the day with a first meal so your targets and coaching stay accurate.</div>
+                    <button onclick="openLogMealModal()" class="w-full py-3.5 px-4 rounded-2xl border border-blue-500/30 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 font-bold text-sm transition shadow-sm active:scale-95">
+                        + Log first meal
+                    </button>
+                `;
+            } else {
+                badge.textContent = `${appState.meals.length} meal${appState.meals.length > 1 ? 's' : ''} logged`;
+                container.className = "bg-slate-900 rounded-3xl p-4 border border-slate-800 shadow-sm space-y-3 text-left";
+                
+                let html = '<div class="space-y-2.5">';
+                appState.meals.forEach(m => {
+                    html += `
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-950 border border-slate-800">
+                            <div>
+                                <div class="font-bold text-white text-sm">${m.name}</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5 font-medium">
+                                    <span class="text-blue-400 font-bold">${m.calories} kcal</span> · P: ${m.protein}g · C: ${m.carbs}g · F: ${m.fat}g
+                                </div>
+                            </div>
+                            <button onclick="deleteMeal(${m.id})" class="w-8 h-8 rounded-full bg-slate-900 text-slate-400 hover:text-red-400 border border-slate-800 flex items-center justify-center transition shadow-sm">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                html += `</div><button onclick="openLogMealModal()" class="w-full py-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 font-bold text-xs transition">+ Add another meal</button>`;
+                container.innerHTML = html;
+            }
+        }
+
+        // AI Chat Simulated Responses
+        function handleAiChatSubmit(e) {
+            e.preventDefault();
+            const inputField = document.getElementById('ai-chat-input');
+            const msg = inputField.value.trim();
+            if(!msg) return;
+
+            const chatContainer = document.getElementById('chat-messages');
+            
+            // Append user message
+            chatContainer.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-blue-600 text-white p-3.5 rounded-2xl rounded-tr-sm text-xs leading-relaxed max-w-[85%]">
+                        ${escapeHtml(msg)}
+                    </div>
+                </div>
+            `;
+            inputField.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Simulate AI reply
+            setTimeout(() => {
+                let reply = "That sounds like a great choice! To hit your protein goal today, make sure to pair it with lean sources like chicken breast, Greek yogurt, or tofu.";
+                const lower = msg.toLowerCase();
+                if(lower.includes('breakfast')) {
+                    reply = "How about Greek yogurt with mixed berries and a scoop of whey protein? Around 350 kcal and 35g protein!";
+                } else if(lower.includes('dinner')) {
+                    reply = "Try grilled salmon with quinoa and roasted asparagus. Excellent healthy fats and solid protein!";
+                } else if(lower.includes('workout')) {
+                    reply = "Great job staying active! Make sure to consume at least 25g of protein within 45 mins post-workout for optimal recovery.";
+                }
+
+                chatContainer.innerHTML += `
+                    <div class="flex justify-start">
+                        <div class="bg-slate-800 text-slate-200 p-3.5 rounded-2xl rounded-tl-sm text-xs leading-relaxed max-w-[85%]">
+                            ${reply}
+                        </div>
+                    </div>
+                `;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 600);
+        }
+
+        // Toast Helper
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>

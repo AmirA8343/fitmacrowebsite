@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["api/**/*.tsx"]
+  "include": ["api/**/*.tsx", "api/**/*.ts"]
 }

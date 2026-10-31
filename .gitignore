@@ -3,3 +3,8 @@ node_modules/
 .DS_Store
 npm-debug.log*
 public/
+
+.fitmacro-preview/
+.env
+.env.local
+.env.*.local
