@@ -20,16 +20,16 @@ if (serve) {
   process.env.FITMACRO_LOCAL_PREVIEW = 'true';
   await mkdir('.fitmacro-preview', { recursive: true });
   const temporary = await mkdtemp(join(process.cwd(), '.fitmacro-preview', 'api-'));
-  await build({ entryPoints: { analyze: 'api/analyze.ts', subscription: 'api/subscription.ts' }, bundle: true, packages: 'external', platform: 'node', format: 'cjs', outdir: temporary, outExtension: { '.js': '.cjs' } });
+  await build({ entryPoints: { analyze: 'api/analyze.ts', subscription: 'api/subscription.ts', barcode: 'api/barcode.ts' }, bundle: true, packages: 'external', platform: 'node', format: 'cjs', outdir: temporary, outExtension: { '.js': '.cjs' } });
   const handlers = {};
-  for (const name of ['analyze', 'subscription']) handlers[`/api/${name}`] = (await import(pathToFileURL(join(temporary, `${name}.cjs`)).href)).default.default;
+  for (const name of ['analyze', 'subscription', 'barcode']) handlers[`/api/${name}`] = (await import(pathToFileURL(join(temporary, `${name}.cjs`)).href)).default.default;
   const server = createServer(async (req, res) => {
     const pathname = new URL(req.url, 'http://localhost').pathname;
     if (handlers[pathname]) {
       res.status = code => { res.statusCode = code; return res; };
       res.json = value => { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(value)); return res; };
       try {
-        let body = ''; for await (const chunk of req) { body += chunk.toString(); if (Buffer.byteLength(body) > 16384) { res.status(413).json({ error: 'Meal description is too large.' }); return; } }
+        let body = ''; for await (const chunk of req) { body += chunk.toString(); if (Buffer.byteLength(body) > 3000000) { res.status(413).json({ error: 'Meal request is too large.' }); return; } }
         req.body = body ? JSON.parse(body) : {};
       } catch { res.status(400).json({ error: 'Invalid JSON.' }); return; }
       try { await handlers[pathname](req, res); } catch { if (!res.headersSent) res.status(500).json({ error: 'The local API could not complete this request.' }); }

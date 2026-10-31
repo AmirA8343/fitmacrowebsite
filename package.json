@@ -7,12 +7,14 @@
     "typecheck": "tsc --noEmit && tsc --project dashboard/tsconfig.json",
     "build:dashboard": "tsc --project dashboard/tsconfig.json && node scripts/build-dashboard.mjs",
     "dev:dashboard": "node scripts/build-dashboard.mjs --serve",
-    "test:dashboard": "node scripts/test-dashboard.mjs && node scripts/test-nutrition.mjs && node scripts/test-meal-result.mjs && node scripts/test-billing.mjs",
+    "test:dashboard": "node scripts/test-dashboard.mjs && node scripts/test-nutrition.mjs && node scripts/test-meal-result.mjs && node scripts/test-billing.mjs && node scripts/test-media.mjs",
     "test:server": "node scripts/test-server-modules.mjs"
   },
   "dependencies": {
     "@google-cloud/firestore": "^7.11.6",
     "@vercel/node": "^5.3.25",
+    "@zxing/browser": "^0.1.5",
+    "@zxing/library": "^0.21.3",
     "firebase": "^12.6.0",
     "firebase-admin": "^13.10.0",
     "react": "^19.2.0",

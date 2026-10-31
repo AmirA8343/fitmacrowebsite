@@ -4,7 +4,7 @@ export type CorrectedIngredient = { name: string; quantity: number | null; unit:
 export type Estimate = { nutrition: Nutrition; summary: string; title?: string; subtitle?: string; foods?: Food[] };
 export function scaleNutrition(nutrition: Nutrition, amount: number, baseAmount: number): Nutrition {
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isFinite(baseAmount) || baseAmount <= 0) throw new Error('Enter a valid portion amount.');
-  return Object.fromEntries(Object.entries(nutrition).map(([key, n]) => [key, Math.round(n * amount / baseAmount)])) as Nutrition;
+  return Object.fromEntries(Object.entries(nutrition).map(([key, n]) => [key, Math.round(n * amount / baseAmount * (key === 'calories' ? 1 : 10)) / (key === 'calories' ? 1 : 10)])) as Nutrition;
 }
 export function parseEstimate(value: unknown): Estimate {
   if (!value || typeof value !== 'object') throw new Error('The nutrition service returned an invalid result. Please try again.');
@@ -26,9 +26,9 @@ export function parseEstimate(value: unknown): Estimate {
   }));
   return estimate;
 }
-export async function analyzeMeal(description: string, signal: AbortSignal, correctedIngredients?: CorrectedIngredient[]): Promise<Estimate> {
+export async function analyzeMeal(description: string, signal: AbortSignal, correctedIngredients?: CorrectedIngredient[], image?: string): Promise<Estimate> {
   const { authorizedFetch } = await import('./subscriptions.js');
-  const response = await authorizedFetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description, ...(correctedIngredients ? { correctedIngredients } : {}) }), signal });
+  const response = await authorizedFetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description, ...(image ? { image } : {}), ...(correctedIngredients ? { correctedIngredients } : {}) }), signal });
   window.dispatchEvent(new Event('fitmacro:usage'));
   const result = await response.json().catch(() => null);
   if (!response.ok) throw new Error(typeof result?.error === 'string' ? result.error : 'The nutrition service is unavailable. Please try again.');

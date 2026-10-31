@@ -8,7 +8,7 @@ const output = await mkdtemp(join(process.cwd(), '.fitmacro-preview', 'esm-test-
 try {
   execFileSync(process.execPath, ['node_modules/typescript/bin/tsc', '--project', 'tsconfig.json', '--noEmit', 'false', '--rootDir', '.', '--outDir', output], { stdio: 'pipe' });
   // Use TypeScript's actual emitted .js files in this ESM package, without a bundler.
-  for (const name of ['subscription', 'analyze', 'blog']) {
+  for (const name of ['subscription', 'analyze', 'barcode', 'blog']) {
     const source = await readFile(join(output, 'api', `${name}.js`), 'utf8');
     assert(!source.includes('Object.defineProperty(exports'), `${name} must not emit CommonJS exports`);
     const module = await import(pathToFileURL(join(output, 'api', `${name}.js`)).href);

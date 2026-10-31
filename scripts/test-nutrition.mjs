@@ -13,7 +13,7 @@ const macros = { calories: 160, protein: 12.5, carbs: 1.2, fat: 10 };
 assert.deepEqual(parseEstimate({ ...macros, ai_summary: 'Two eggs' }), { nutrition: macros, summary: 'Two eggs' });
 assert.equal(parseEstimate({ nutrition: { calories: 50, protein: 0, carbohydrates: 12, fats: 0 } }).nutrition.carbs, 12);
 for (const invalid of [null, {}, { ...macros, calories: -1 }, { ...macros, protein: '12' }, { calories: 0, protein: 0, carbs: 0, fat: 0 }, { ...macros, fat: Infinity }]) assert.throws(() => parseEstimate(invalid));
-assert.deepEqual(scaleNutrition({ calories: 100, protein: 10, carbs: 20, fat: 3 }, 150, 100), { calories: 150, protein: 15, carbs: 30, fat: 5 });
+assert.deepEqual(scaleNutrition({ calories: 100, protein: 10, carbs: 20, fat: 3 }, 150, 100), { calories: 150, protein: 15, carbs: 30, fat: 4.5 });
 assert.throws(() => scaleNutrition(macros, 0, 100));
 assert.throws(() => scaleNutrition(macros, 100, 0));
 const detailed = parseEstimate({ ...macros, ui_title: 'Eggs', ui_subtitle: 'Breakfast', ai_foods: [null, { name: '' }, { name: 'egg', quantity: 2, unit: 'piece', display: '2 eggs' }] });

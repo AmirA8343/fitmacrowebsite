@@ -34,13 +34,13 @@ Web logs and profiles stay in this browser. Signed-in users have separate local 
 
 ## Mobile Log Meal design
 
-The web Log Meal card uses the dashboard’s dark palette and follows the mobile `app/log-meal.tsx` screen: dark Quick Capture card, Text/Scan primary row, compact Camera/Photos row, description shell, and Cancel/Add Meal actions. Scan, Camera, and Photos are visibly disabled until the corresponding services are connected. New meals use text analysis first, followed by an editable nutrition review. Manual entry remains available; editing saved meals does not call AI.
+The web Log Meal card uses the dashboard’s dark palette and follows the mobile `app/log-meal.tsx` screen: dark Quick Capture card, Text/Scan primary row, compact Camera/Photos row, description shell, and Cancel/Add Meal actions. Scan opens the browser camera decoder with numeric entry fallback. Camera captures a meal; Photos selects a file. New meals use text analysis first, followed by an editable nutrition review. Manual entry remains available; editing saved meals does not call AI.
 
 ## Mobile integration findings
 
 Inspected `/Users/amir/Development/fitmacro-health-backup-20260128-214803` read-only. Its `lib/mealStorage.ts` saves individual meals in AsyncStorage under per-user, per-day keys. It uploads daily totals to `users/{uid}/dailyTotals/{date}` and ecosystem summaries, but this meal save path does not write individual meals to Firestore. RevenueCat identifies users with their Firebase UID in `context/AuthContext.tsx`.
 
-Per the requested scope, keep cloud integration focused on numeric summaries; no meal-image sharing is implemented. The web app now reuses Firebase Authentication from the same project, while local guest and per-user browser data remain separate. RevenueCat and cloud totals are not connected by this change. The mobile project was not modified.
+Per the requested scope, keep cloud integration focused on numeric summaries; no cloud meal-image storage or sharing is implemented. The web app now reuses Firebase Authentication from the same project, while local guest and per-user browser data remain separate. RevenueCat and cloud totals are not connected by this change. The mobile project was not modified.
 
 ## Login and calorie setup
 
@@ -70,7 +70,7 @@ The adapter rejects empty or oversized descriptions, validates returned numeric 
 
 `MealResult.tsx` follows the mobile `app/meal-result.tsx` and `app/barcode-result.tsx` screens. Text analysis opens a distinct result view with a Text badge, short meal title/subtitle, colored macro snapshot, ingredient rows, and a sticky Log Meal action. Numeric fields and the date are behind **Edit nutrition & date**. Ingredient changes use the mobile endpoint’s `correctedIngredients` contract; Update nutrition recalculates the estimate before logging, while Discard changes restores the last analyzed ingredients. Returning to entry preserves the original typed description.
 
-The component also implements the photo variant (image hero and overlaid summary) and barcode variant (product hero/fallback, brand/base-serving details, amount entry, Calculate, scaled macros, Log Meal, Scan again). These variants are render-tested but are not exposed by the disabled Camera/Photos/Scan input controls yet. No image uploads or scanning integration were added. Barcode portion calculation is required before saving when a measurable base serving exists; changing the amount invalidates the previous calculation.
+The component also implements the photo variant (image hero and overlaid summary) and barcode variant (product hero/fallback, brand/base-serving details, amount entry, Calculate, scaled macros, Log Meal, Scan again). All variants are connected to their capture controls. Photo JPEGs are compressed in the browser (1600 px maximum dimension), sent transiently through `/api/analyze` to the existing mobile `/api/nutrition` endpoint, and retained only in browser IndexedDB for local history. The selected mobile route forwards inline photos for analysis without image-storage operations or logging raw image data. No image is saved in Firebase Storage or server disk. AI-provider retention policies still apply. Barcode portion calculation is required before saving when a measurable base serving exists; changing the amount invalidates the previous calculation.
 
 The web adapter preserves only validated title/subtitle/ingredient metadata along with numeric macros. Metadata is displayed during review; saved meal records retain their existing numeric/description format. Restart the local dev server after API changes so its bundled adapter picks up the metadata and ingredient-correction changes.
 
@@ -89,3 +89,7 @@ Favorites are independent meal snapshots within the same guest/account-local dat
 The Plans panel prepares RevenueCat hosted checkout under the existing Firebase UID and recognizes mobile Pro/Pro+ entitlements server-side. Web checkout stays disabled until configured; no live payments or RevenueCat products were created. Free analysis is now limited server-side to three per UTC day, with transactional production storage and a clearly labeled in-memory local preview.
 
 Follow [BILLING-SETUP.md](./BILLING-SETUP.md) to configure credentials, attach web products to the mobile entitlements, and validate sandbox purchases across platforms. Restart `npm run dev:dashboard` after server or environment changes. Existing guest users may open the public entry in a private window to see the first-visit experience.
+
+
+### Photo and barcode setup
+No website OpenAI key is needed. Photo analysis defaults to the existing mobile `/api/nutrition` route, optionally overridden with server-only `FITMACRO_PHOTO_ENDPOINT`. Text keeps using `/api/new_ui_copy`. The mobile backend source remains unchanged. Barcode lookup uses Open Food Facts (ODbL), returns only product name, brand, and complete per-100g nutrition, and requires users to calculate a portion. Missing products/nutrition fall back to manual entry, with no AI guessing. Browser cameras require HTTPS or localhost and user permission; gallery and barcode-number entry remain available when camera access fails. Camera streams stop on close or mode change. Photos are stored in IndexedDB separate from numeric JSON exports and are not synced across devices. Clearing browser data removes them. Real-device camera/gallery and provider acceptance need manual testing after deployment.
