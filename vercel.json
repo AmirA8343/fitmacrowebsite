@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/free-ai-calorie-counter",
-      "destination": "/dashboard/index.html"
+      "destination": "/dashboard"
     },
     {
       "source": "/blog",

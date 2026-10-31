@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { parseEstimate } from '../dashboard/src/nutrition';
-import { access, AccessError, identify } from '../server/billing';
+import { parseEstimate } from '../dashboard/src/nutrition.js';
+import { access, AccessError, identify } from '../server/billing.js';
 const DEFAULT_ENDPOINT = 'https://macro-mate-backend-taupe.vercel.app/api/new_ui_copy';
 const attempts = new Map<string, { count: number; until: number }>();
 export default async function handler(req: VercelRequest, res: VercelResponse) {

@@ -1,4 +1,4 @@
-import type { Nutrition } from './model';
+import type { Nutrition } from './model.js';
 export type Profile = { age: number; weight: number; height: number; gender: 'male' | 'female'; goal: 'maintenance' | 'lose' | 'gain' };
 export function isProfile(value: unknown): value is Profile {
   if (!value || typeof value !== 'object') return false;

@@ -1,4 +1,4 @@
-import { isNutrition, type Nutrition } from './model';
+import { isNutrition, type Nutrition } from './model.js';
 export type Food = { name: string; quantity?: number; unit?: string; weight_g?: number; display?: string };
 export type CorrectedIngredient = { name: string; quantity: number | null; unit: string; weight_g: number | null };
 export type Estimate = { nutrition: Nutrition; summary: string; title?: string; subtitle?: string; foods?: Food[] };
@@ -27,7 +27,7 @@ export function parseEstimate(value: unknown): Estimate {
   return estimate;
 }
 export async function analyzeMeal(description: string, signal: AbortSignal, correctedIngredients?: CorrectedIngredient[]): Promise<Estimate> {
-  const { authorizedFetch } = await import('./subscriptions');
+  const { authorizedFetch } = await import('./subscriptions.js');
   const response = await authorizedFetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description, ...(correctedIngredients ? { correctedIngredients } : {}) }), signal });
   window.dispatchEvent(new Event('fitmacro:usage'));
   const result = await response.json().catch(() => null);

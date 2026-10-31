@@ -1,5 +1,5 @@
-import { auth } from './firebase';
-import type { Access } from '../../shared/plans';
+import { auth } from './firebase.js';
+import type { Access } from '../../shared/plans.js';
 export async function authorizedFetch(url: string, options: RequestInit = {}) {
   const token = await auth.currentUser?.getIdToken();
   const headers = new Headers(options.headers);

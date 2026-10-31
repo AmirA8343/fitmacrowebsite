@@ -1,4 +1,4 @@
-import { isProfile, type Profile } from './profile';
+import { isProfile, type Profile } from './profile.js';
 export const nutrients = ['calories', 'protein', 'carbs', 'fat'] as const;
 export type Nutrient = typeof nutrients[number];
 export type Nutrition = Record<Nutrient, number>;

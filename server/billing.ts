@@ -3,7 +3,7 @@ import type { VercelRequest } from '@vercel/node';
 import { cert, getApps, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
-import { ENTITLEMENTS, FREE_DAILY_ANALYSES, type Access } from '../shared/plans';
+import { ENTITLEMENTS, FREE_DAILY_ANALYSES, type Access } from '../shared/plans.js';
 export class AccessError extends Error { constructor(public status: number, message: string, public code = 'unavailable') { super(message); } }
 const PROJECT = 'fitmacro-e0d48';
 const localPreview = () => process.env.FITMACRO_LOCAL_PREVIEW === 'true' && !process.env.VERCEL;

@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { access, AccessError, checkoutUrl, identify, revenueCat } from '../server/billing';
+import { access, AccessError, checkoutUrl, identify, revenueCat } from '../server/billing.js';
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store');
   try {
