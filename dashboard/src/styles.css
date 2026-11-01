@@ -33,3 +33,7 @@
 .public-footer .language-links { display:flex; flex-wrap:wrap; gap:16px; width:100%; }
 .public-footer { flex-wrap:wrap; }
 .language-links [aria-current="page"] { color:#f1f5f9; text-decoration:underline; }
+
+.settings-language { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-bottom:20px; margin-bottom:20px; border-bottom:1px solid #334155; }
+.settings-language h3 { margin:0; }
+.settings-language .language-selector select { max-width:none; min-width:145px; }
