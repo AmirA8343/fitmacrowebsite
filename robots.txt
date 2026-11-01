@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
 Sitemap: https://www.fitmacro.ca/sitemap.xml
 Sitemap: https://www.fitmacro.ca/blog/sitemap.xml

@@ -3,12 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/verify-blog.mjs && tsc --noEmit && npm run build:dashboard",
+    "build": "node scripts/verify-blog.mjs && tsc --noEmit && npm run build:dashboard && npm run test:seo",
     "typecheck": "tsc --noEmit && tsc --project dashboard/tsconfig.json",
     "build:dashboard": "tsc --project dashboard/tsconfig.json && node scripts/build-dashboard.mjs",
     "dev:dashboard": "node scripts/build-dashboard.mjs --serve",
     "test:dashboard": "node scripts/test-dashboard.mjs && node scripts/test-nutrition.mjs && node scripts/test-meal-result.mjs && node scripts/test-billing.mjs && node scripts/test-media.mjs && node scripts/test-i18n.mjs",
-    "test:server": "node scripts/test-server-modules.mjs"
+    "test:server": "node scripts/test-server-modules.mjs",
+    "test:seo": "node scripts/test-dashboard-seo.mjs"
   },
   "dependencies": {
     "@google-cloud/firestore": "^7.11.6",

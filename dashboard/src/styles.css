@@ -29,3 +29,7 @@
 .account-actions { flex-wrap:wrap; }
 .public-app nav { flex-wrap:wrap; }
 @media(max-width:600px) { .header-inner { flex-wrap:wrap; gap:12px; } .account-actions { gap:8px; } }
+
+.public-footer .language-links { display:flex; flex-wrap:wrap; gap:16px; width:100%; }
+.public-footer { flex-wrap:wrap; }
+.language-links [aria-current="page"] { color:#f1f5f9; text-decoration:underline; }

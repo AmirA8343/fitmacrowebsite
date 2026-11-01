@@ -1,3 +1,4 @@
+import { syncPageMetadata } from './seo';
 import { subscribeLanguage, t, getLanguage } from './i18n';
 import LanguageSelector from './LanguageSelector';
 import { useSyncExternalStore, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
@@ -92,7 +93,7 @@ function Dashboard({ user, login, logout, boot, initialDescription }: { user: Us
     return items.length ? <div className="meal-list">{[...items].sort((a,b) => b.createdAt.localeCompare(a.createdAt)).map(meal => <article className="meal" key={meal.id}><LocalPhoto id={meal.photoId} /><div className="meal-symbol" aria-hidden="true">◈</div><div className="meal-info"><h3>{meal.name}</h3><p>{fmt(meal.calories)} kcal <span>· P {fmt(meal.protein)} · C {fmt(meal.carbs)} · F {fmt(meal.fat)} g</span></p></div><button className="text-button" aria-label={t('Edit {name}', { name: meal.name })} onClick={() => { setEditing(meal); setModal('meal'); }}>{t("Edit")}</button><button className="icon delete" aria-label={t('Delete {name}', { name: meal.name })} onClick={() => { if (window.confirm(t('Delete “{name}”?', { name: meal.name }))) { setData(d => ({ ...d, meals: d.meals.filter(m => m.id !== meal.id) })); if (meal.photoId) void localPhoto(meal.photoId, null).catch(() => {}); setNotice(t("Meal deleted.")); } }}>×</button></article>)}</div> : <div className="empty"><p>{t("No meals logged for this day.")}</p><button className="secondary" onClick={() => { setSelectedDate(date); setModal('meal'); }}>{t("+ Log a meal")}</button></div>;
   }
   const hour = new Date().getHours();
-  return <><header><div className="header-inner"><a className="brand" href="./">FitMacro<span>WEB</span></a><div className="account-actions"><LanguageSelector /><button className="text-button" onClick={() => setModal('plans')}>{accessStatus && accessStatus.tier !== 'free' ? t("My subscription") : t("Get Pro")}</button>{user ? <><span className="account-name" title={user.email ?? undefined}>{user.displayName ?? user.email}</span><button className="text-button" onClick={() => { void logout().catch(err => setNotice(authMessage(err))); }}>{t("Sign out")}</button></> : <button className="text-button" onClick={() => login()}>{t("Sign in")}</button>}<button className="icon" aria-label={t("Nutrition settings")} onClick={() => setModal('settings')}>⚙</button></div></div></header><main>
+  return <><header><div className="header-inner"><a className="brand" href="/">FitMacro<span>WEB</span></a><div className="account-actions"><LanguageSelector /><button className="text-button" onClick={() => setModal('plans')}>{accessStatus && accessStatus.tier !== 'free' ? t("My subscription") : t("Get Pro")}</button>{user ? <><span className="account-name" title={user.email ?? undefined}>{user.displayName ?? user.email}</span><button className="text-button" onClick={() => { void logout().catch(err => setNotice(authMessage(err))); }}>{t("Sign out")}</button></> : <button className="text-button" onClick={() => login()}>{t("Sign in")}</button>}<button className="icon" aria-label={t("Nutrition settings")} onClick={() => setModal('settings')}>⚙</button></div></div></header><main>
     <div className="date-heading"><span>{new Date(`${today}T12:00:00`).toLocaleDateString(getLanguage(), { weekday: 'long', month: 'long', day: 'numeric' })}</span><span className="pill">{t("Overview")}</span></div>
     <div className="local-note">{user ? t("Signed in · Web logs are saved in this browser · Mobile sync isn’t connected yet") : t("Guest mode · Saved in this browser · No account needed")}</div>
     <div className="allowance-strip"><span>{accessStatus ? accessStatus.tier !== 'free' ? t("✓ Pro access active · Web, iOS & Android") : t('{remaining} / 3 free AI analyses left today', { remaining: accessStatus.remaining ?? 0 }) + (accessStatus.preview ? t(' · Local preview') : '') : t('3 free AI analyses daily · Manual logging is free')}</span><button onClick={() => setModal('plans')}>{accessStatus && accessStatus.tier !== 'free' ? t("Manage plan") : t("View plans →")}</button></div>
@@ -117,8 +118,8 @@ function returningGuest() {
   try { return localStorage.getItem('fitmacro.web.guest') === 'true'; } catch { return false; }
 }
 export default function App() {
-  const language = useSyncExternalStore(subscribeLanguage, getLanguage, () => 'en');
-  useEffect(() => { document.documentElement.lang = language; document.title = t('FitMacro · Nutrition, made simpler.'); }, [language]);
+  const language = useSyncExternalStore(subscribeLanguage, getLanguage, getLanguage);
+  useEffect(() => { syncPageMetadata(language); }, [language]);
   const [user, setUser] = useState<User | null>(null);
   const [screen, setScreen] = useState<'public' | 'login' | 'dashboard'>(() => returningGuest() ? 'dashboard' : 'public');
   const [boot, setBoot] = useState<'meal' | 'plans' | null>(null);

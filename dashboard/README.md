@@ -96,4 +96,15 @@ No website OpenAI key is needed. Photo analysis defaults to the existing mobile 
 
 
 ### Web languages
-The web app supports English, Spanish, French, and German. The language selector appears on the public landing page, sign-in page, and dashboard. The choice persists under `fitmacro.web.language`; browser language supplies the default when there is no saved choice. Optional `?lang=es`, `?lang=fr`, or `?lang=de` links open a chosen language. Interface labels, notices, authentication messages, onboarding, history, result controls, and dates/numbers use the chosen locale. Stored meals and account data are preserved when switching. Text analysis sends the validated locale to the existing mobile endpoint; generated photo summaries and product names may remain in the language supplied by the existing photo/product services. The mobile backend and hosted RevenueCat checkout translations are not changed.
+The web app supports English, Spanish, French, and German. The language selector appears on the public landing page, sign-in page, and dashboard. The choice persists under `fitmacro.web.language`; explicit localized landing URLs set the page language. On the dashboard alias, browser language supplies the default when there is no saved choice; `?lang=es`, `?lang=fr`, or `?lang=de` remain supported there. Interface labels, notices, authentication messages, onboarding, history, result controls, and dates/numbers use the chosen locale. Stored meals and account data are preserved when switching. Text analysis sends the validated locale to the existing mobile endpoint; generated photo summaries and product names may remain in the language supplied by the existing photo/product services. The mobile backend and hosted RevenueCat checkout translations are not changed.
+
+
+### Localized search pages
+The build prerenders the public landing in four languages with unique titles/descriptions, self-referencing canonical URLs, reciprocal hreflang (`en`, `es`, `fr`, `de`, `x-default`), social metadata, and WebApplication JSON-LD. The language footer contains ordinary links in the initial HTML. Public language paths take precedence over stored/browser preferences, with no automatic language redirects. The existing Vercel `cleanUrls` setting serves these generated HTML files directly; they are not rewritten to an English page.
+
+- English: `/free-ai-calorie-counter`
+- Spanish: `/es/contador-calorias-ia-gratis`
+- French: `/fr/compteur-calories-ia-gratuit`
+- German: `/de/kostenloser-ki-kalorienzaehler`
+
+The tracked root `sitemap.xml` includes all four canonical `www.fitmacro.ca` URLs; `robots.txt` points to that sitemap and the existing blog sitemap. `/dashboard` uses `noindex,follow` and remains available for existing users. Builds with `VERCEL_ENV=preview` emit `noindex,follow` for all app landing variants. Production builds are indexable. The full build validates static HTML, canonicals, language links, hreflang, structured data, and sitemap entries automatically. No indexing or rankings are guaranteed. After deploying `main`, submit `https://www.fitmacro.ca/sitemap.xml` in Google Search Console and inspect the four public URLs. Search Console account changes were not performed.

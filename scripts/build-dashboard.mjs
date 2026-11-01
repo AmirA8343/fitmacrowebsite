@@ -1,18 +1,26 @@
 import { build, context } from 'esbuild';
 import { mkdir, readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { seoHead } from './dashboard-seo.mjs';
 import { pathToFileURL } from 'node:url';
 import { createServer, request } from 'node:http';
 try { process.loadEnvFile('.env.local'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
 const serve = process.argv.includes('--serve');
 const options = { entryPoints: ['dashboard/src/main.tsx'], bundle: true, outdir: 'public/dashboard/assets', entryNames: 'app', minify: !serve, sourcemap: serve, target: ['es2022'], define: { 'process.env.NODE_ENV': JSON.stringify(serve ? 'development' : 'production') } };
 await mkdir('public/dashboard', { recursive: true });
-const prerender = await build({ stdin: { contents: `import React from 'react'; import { renderToStaticMarkup } from 'react-dom/server'; import Landing from './dashboard/src/Landing'; export function render() { return renderToStaticMarkup(React.createElement(Landing)); }`, resolveDir: process.cwd(), loader: 'tsx' }, bundle: true, packages: 'external', platform: 'node', format: 'cjs', write: false });
+const prerender = await build({ stdin: { contents: `import React from 'react'; import { renderToStaticMarkup } from 'react-dom/server'; import Landing from './dashboard/src/Landing'; import { setLanguage } from './dashboard/src/i18n'; export { seoPages, siteOrigin } from './dashboard/src/seo'; export function render(language) { setLanguage(language); return renderToStaticMarkup(React.createElement(Landing)); }`, resolveDir: process.cwd(), loader: 'tsx' }, bundle: true, packages: 'external', platform: 'node', format: 'cjs', write: false });
 const rendering = { exports: {} };
 new Function('require', 'module', 'exports', prerender.outputFiles[0].text)(createRequire(import.meta.url), rendering, rendering.exports);
-const html = (await readFile('dashboard/index.html', 'utf8')).replace('<!--APP-->', rendering.exports.render());
-await writeFile('public/dashboard/index.html', html);
+const { seoPages, siteOrigin } = rendering.exports;
+const template = await readFile('dashboard/index.html', 'utf8');
+const preview = process.env.VERCEL_ENV === 'preview';
+for (const [language, page] of Object.entries(seoPages)) {
+  const html = template.replace('<!--LANG-->',language).replace('<!--SEO-->',seoHead(language,seoPages,siteOrigin,{ noindex:preview })).replace('<!--APP-->',rendering.exports.render(language));
+  const file = join('public', page.path.slice(1) + '.html');
+  await mkdir(dirname(file),{recursive:true}); await writeFile(file,html);
+}
+await writeFile('public/dashboard/index.html',template.replace('<!--LANG-->','en').replace('<!--SEO-->',seoHead('en',seoPages,siteOrigin,{noindex:true})).replace('<!--APP-->',rendering.exports.render('en')));
 if (serve) {
   const ctx = await context(options);
   await ctx.watch();
@@ -35,7 +43,7 @@ if (serve) {
       try { await handlers[pathname](req, res); } catch { if (!res.headersSent) res.status(500).json({ error: 'The local API could not complete this request.' }); }
       return;
     }
-    const upstream = request({ host: '127.0.0.1', port: assets.port, path: pathname === '/free-ai-calorie-counter' ? '/dashboard/' : req.url, method: req.method, headers: req.headers }, response => { res.writeHead(response.statusCode, response.headers); response.pipe(res); });
+    const upstream = request({ host: '127.0.0.1', port: assets.port, path: Object.values(seoPages).some(page => page.path === pathname) ? `${pathname}.html` : req.url, method: req.method, headers: req.headers }, response => { res.writeHead(response.statusCode, response.headers); response.pipe(res); });
     upstream.on('error', () => { if (!res.headersSent) res.writeHead(502); res.end('Preview server unavailable'); });
     req.pipe(upstream);
   });

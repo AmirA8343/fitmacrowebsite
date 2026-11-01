@@ -4,10 +4,6 @@
   "outputDirectory": "public",
   "rewrites": [
     {
-      "source": "/free-ai-calorie-counter",
-      "destination": "/dashboard"
-    },
-    {
       "source": "/blog",
       "destination": "/api/blog?locale=en"
     },

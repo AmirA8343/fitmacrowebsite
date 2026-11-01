@@ -47,10 +47,10 @@ const module={exports:{}};
 new Function('require','module','exports',output.outputFiles[0].text)(createRequire(import.meta.url),module,module.exports);
 // Exercise preference initialization in isolated bundles with browser-like storage.
 const localeBundle = await build({ entryPoints:['dashboard/src/i18n.ts'],bundle:true,platform:'node',format:'cjs',write:false });
-function browserLocale({query='',saved=null,browser='en-US',blocked=false}={}) {
+function browserLocale({query='',path='/dashboard',saved=null,browser='en-US',blocked=false}={}) {
  const values=new Map(saved ? [['fitmacro.web.language',saved]] : []);
- const location={href:'https://fitmacro.ca/free-ai-calorie-counter'+query,search:query};
- const fakeWindow={location,history:{replaceState(_state,_title,url){location.href=String(url);location.search=new URL(url).search;}}};
+ const location={href:'https://fitmacro.ca'+path+query,search:query,pathname:path};
+ const fakeWindow={location,history:{replaceState(_state,_title,url){location.href=String(url);location.search=new URL(url).search;location.pathname=new URL(url).pathname;}}};
  const storage={getItem(key){if(blocked)throw new Error('blocked');return values.get(key)??null;},setItem(key,value){if(blocked)throw new Error('blocked');values.set(key,value);}};
  const doc={documentElement:{lang:'en'}};
  const loaded={exports:{}};
@@ -63,3 +63,7 @@ assert.equal(browserLocale({saved:'invalid',browser:'es-MX'}).i18n.getLanguage()
 assert.equal(browserLocale({browser:'it-IT'}).i18n.getLanguage(),'en');
 const blocked=browserLocale({blocked:true,browser:'de-DE'});blocked.i18n.setLanguage('fr');assert.equal(blocked.i18n.getLanguage(),'fr');
 console.log('Language preference checks passed: browser fallback, persisted choice, query overrides, reload URL updates, and blocked storage.');
+
+const spanishPage=browserLocale({path:'/es/contador-calorias-ia-gratis',saved:'de',browser:'fr-FR'}); assert.equal(spanishPage.i18n.getLanguage(),'es');spanishPage.i18n.setLanguage('fr');assert.equal(spanishPage.location.pathname,'/fr/compteur-calories-ia-gratuit');
+const englishPage=browserLocale({path:'/free-ai-calorie-counter',saved:'de',browser:'de-DE'});assert.equal(englishPage.i18n.getLanguage(),'en');
+console.log('SEO locale checks passed: explicit page language wins over saved/browser preferences and switching updates the public URL.');
