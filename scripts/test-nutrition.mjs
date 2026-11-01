@@ -52,6 +52,10 @@ try {
   const corrected = await invoke({ socket: { remoteAddress: 'correction-client' }, headers: { 'content-type': 'application/json' }, body: { description: '2 boiled eggs', correctedIngredients: corrections } });
   assert.equal(corrected.statusCode, 200); assert.equal(corrected.body.ai_foods[0].quantity, 3); assert.equal(corrected.body.ui_title, 'Eggs');
   assert.equal((await invoke({ body: { description: 'eggs', correctedIngredients: [{ name: 'egg', quantity: -1, unit: 'piece', weight_g: null }] } })).statusCode, 400);
+  for (const language of ['es','fr','de']) {
+    globalThis.fetch = async (url,options) => { assert.equal(JSON.parse(options.body).language,language); return Response.json({ ...macros }); };
+    assert.equal((await invoke({socket:{remoteAddress:'locale-'+language},headers:{'content-type':'application/json'},body:{description:'meal',language}})).statusCode,200);
+  }
   const otherClient = { socket: { remoteAddress: 'other-client' }, headers: { 'content-type': 'application/json', 'x-real-ip': 'other-client' } };
   globalThis.fetch = async () => Response.json({ error: 'private internal details' }, { status: 500 });
   const failed = await invoke(otherClient); assert.equal(failed.statusCode, 502); assert(!failed.body.error.includes('private'));

@@ -9,6 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return res.status(405).json({ error: 'Use POST to analyze a meal.' }); }
   if (!req.headers['content-type']?.toLowerCase().startsWith('application/json')) return res.status(415).json({ error: 'Send a JSON meal description.' });
+  const language = ['en','es','fr','de'].includes(req.body?.language) ? req.body.language : 'en';
   const image = req.body?.image;
   if (image !== undefined && !validImage(image)) return res.status(400).json({ error: 'Choose a JPEG photo smaller than 2 MB after compression.' });
   const description = req.body?.description ?? (image ? '' : undefined);
@@ -32,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const endpoint = new URL(image ? process.env.FITMACRO_PHOTO_ENDPOINT || DEFAULT_IMAGE_ENDPOINT : process.env.FITMACRO_NUTRITION_ENDPOINT || DEFAULT_ENDPOINT);
     if (endpoint.protocol !== 'https:') return res.status(503).json({ error: 'The nutrition service is not configured correctly.' });
-    const upstream = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description: description.trim(), language: 'en', ...(image ? { photoUrl: image } : {}), ...(correctedIngredients ? { correctedIngredients } : {}) }), signal: controller.signal });
+    const upstream = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description: description.trim(), language, ...(image ? { photoUrl: image } : {}), ...(correctedIngredients ? { correctedIngredients } : {}) }), signal: controller.signal });
     if (!upstream.ok) return res.status(upstream.status === 429 ? 429 : 502).json({ error: upstream.status === 429 ? 'The nutrition service is busy. Please try again shortly.' : 'The nutrition service could not analyze this meal. Please try again or use manual entry.' });
     const estimate = parseEstimate(await upstream.json());
     successful = true;

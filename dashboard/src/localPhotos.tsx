@@ -1,3 +1,4 @@
+import { t, getLanguage } from './i18n';
 import { useEffect, useState } from 'react';
 function database(): Promise<IDBDatabase> {
   return new Promise((resolve,reject) => { const req = indexedDB.open('fitmacro-local-photos',1); req.onupgradeneeded = () => req.result.createObjectStore('photos'); req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); });
@@ -10,5 +11,5 @@ export async function localPhoto(id: string, value?: string | null): Promise<str
 export default function LocalPhoto({ id }: { id?: string }) {
   const [src,setSrc] = useState<string>();
   useEffect(() => { let active = true; setSrc(undefined); if (id) void localPhoto(id).then(value => { if (active) setSrc(value); }).catch(() => {}); return () => { active = false; }; },[id]);
-  return src ? <img className="local-meal-photo" src={src} alt="Meal saved in this browser" /> : null;
+  return src ? <img className="local-meal-photo" src={src} alt={t("Meal saved in this browser")} /> : null;
 }

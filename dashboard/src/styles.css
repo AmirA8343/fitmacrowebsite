@@ -22,3 +22,10 @@
 .capture-optional-details summary { color:#60a5fa; cursor:pointer; font-size:13px; font-weight:650; list-style:none; padding:8px 0; }
 .capture-optional-details summary::-webkit-details-marker { display:none; }
 .capture-optional-details[open] summary { margin-bottom:6px; }
+
+.language-selector { display:inline-flex; align-items:center; }
+.language-selector select { width:auto; max-width:135px; margin:0; padding:8px 10px; background:#0f172a; border:1px solid #334155; color:#f1f5f9; border-radius:10px; font:inherit; font-size:13px; }
+.entry-page > .language-selector { align-self:flex-end; }
+.account-actions { flex-wrap:wrap; }
+.public-app nav { flex-wrap:wrap; }
+@media(max-width:600px) { .header-inner { flex-wrap:wrap; gap:12px; } .account-actions { gap:8px; } }

@@ -1,3 +1,4 @@
+import { getLanguage, t } from './i18n.js';
 import { isNutrition, type Nutrition } from './model.js';
 export type Food = { name: string; quantity?: number; unit?: string; weight_g?: number; display?: string };
 export type CorrectedIngredient = { name: string; quantity: number | null; unit: string; weight_g: number | null };
@@ -28,9 +29,9 @@ export function parseEstimate(value: unknown): Estimate {
 }
 export async function analyzeMeal(description: string, signal: AbortSignal, correctedIngredients?: CorrectedIngredient[], image?: string): Promise<Estimate> {
   const { authorizedFetch } = await import('./subscriptions.js');
-  const response = await authorizedFetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description, ...(image ? { image } : {}), ...(correctedIngredients ? { correctedIngredients } : {}) }), signal });
+  const response = await authorizedFetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ description, language: getLanguage(), ...(image ? { image } : {}), ...(correctedIngredients ? { correctedIngredients } : {}) }), signal });
   window.dispatchEvent(new Event('fitmacro:usage'));
   const result = await response.json().catch(() => null);
-  if (!response.ok) throw new Error(typeof result?.error === 'string' ? result.error : 'The nutrition service is unavailable. Please try again.');
+  if (!response.ok) throw new Error(t(typeof result?.error === 'string' ? result.error : 'The nutrition service is unavailable. Please try again.'));
   return parseEstimate(result);
 }
