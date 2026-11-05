@@ -37,3 +37,5 @@
 .settings-language { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-bottom:20px; margin-bottom:20px; border-bottom:1px solid #334155; }
 .settings-language h3 { margin:0; }
 .settings-language .language-selector select { max-width:none; min-width:145px; }
+
+.public-guide{margin-top:65px;max-width:850px;scroll-margin-top:100px}.public-guide h2{font-size:25px;margin-bottom:24px}.public-guide article{margin:24px 0}.public-guide h3{font-size:18px;margin-bottom:10px}.public-guide p{font-size:14px;line-height:1.8;color:#94a3b8}.public-guide a{display:inline-block;color:#60a5fa;font-size:14px;line-height:1.6}#public-description{scroll-margin-top:110px}

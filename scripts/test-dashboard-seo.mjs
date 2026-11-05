@@ -8,6 +8,10 @@ const module={exports:{}};new Function('require','module','exports',bundle.outpu
 const {seoPages,siteOrigin}=module.exports;
 const sitemap=await readFile('public/sitemap.xml','utf8');
 const titles=new Set();
+const guideBundle=await build({entryPoints:['dashboard/src/LandingGuide.tsx'],bundle:true,platform:'node',format:'cjs',write:false});
+const guideModule={exports:{}};new Function('require','module','exports',guideBundle.outputFiles[0].text)(createRequire(import.meta.url),guideModule,guideModule.exports);
+const {landingGuides}=guideModule.exports;
+const discoveryPages=await Promise.all(['index.html','apps.html','calorie-counter.html','macro-tracker-app.html'].map(file=>readFile(`public/${file}`,'utf8')));
 for (const [language,page] of Object.entries(seoPages)) {
  const html=await readFile(`public${page.path}.html`,'utf8');
  assert(html.includes(`<html lang="${language}">`));
@@ -17,6 +21,9 @@ for (const [language,page] of Object.entries(seoPages)) {
  assert(html.includes(`rel="canonical" href="${siteOrigin}${page.path}"`));
  assert.equal((html.match(/<h1>/g)||[]).length,1);
  assert(!html.includes('<!--APP-->'));assert(!html.includes('<!--SEO-->'));
+ assert(html.includes(landingGuides[language].title),'Translated guide must be in initial HTML');
+ assert(html.includes('href="#public-description"'),'Meal example must link to the working form');
+ for(const discovery of discoveryPages) assert(discovery.includes(`href="${page.path}"`),'Main discovery pages must link directly to every language');
  for (const [alternate,other] of Object.entries(seoPages)) {
   assert(html.includes(`hreflang="${alternate}" href="${siteOrigin}${other.path}"`));
   assert(html.includes(`href="${other.path}"`),'Language links must exist in initial HTML');
