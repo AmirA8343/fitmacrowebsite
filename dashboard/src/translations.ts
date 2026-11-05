@@ -1,5 +1,8 @@
 const translations = {
   "es": {
+    "✓ Unlimited manual logging": "✓ Registro manual ilimitado",
+    "Start tracking free": "Empieza a registrar gratis",
+    "Get 3 free AI meal analyses per day on the web, unlimited manual logging, and no account required. Upgrade for more AI analyses. A subscription works with the same account on web, iOS, and Android.": "Obtén 3 análisis de comidas con IA gratis al día en la web, registro manual ilimitado y sin necesidad de crear una cuenta. Suscríbete para obtener más análisis con IA. La suscripción funciona con la misma cuenta en la web, iOS y Android.",
     "Language": "Idioma",
     " Local preview allowance resets when the dev server restarts.": " La cuota de prueba local se restablece al reiniciar el servidor.",
     " · Local preview": " · Vista previa local",
@@ -398,6 +401,9 @@ const translations = {
     "You’ve used today’s 3 free AI analyses. Upgrade for more, or use manual logging. Free access resets at midnight UTC.": "Ya usaste los 3 análisis con IA gratuitos de hoy. Suscríbete para obtener más o usa el registro manual. La cuota se restablece a medianoche UTC."
   },
   "fr": {
+    "✓ Unlimited manual logging": "✓ Saisie manuelle illimitée",
+    "Start tracking free": "Commencez à suivre gratuitement",
+    "Get 3 free AI meal analyses per day on the web, unlimited manual logging, and no account required. Upgrade for more AI analyses. A subscription works with the same account on web, iOS, and Android.": "Profitez de 3 analyses de repas IA gratuites par jour sur le web, de la saisie manuelle illimitée et sans compte obligatoire. Abonnez-vous pour obtenir plus d’analyses IA. L’abonnement fonctionne avec le même compte sur le web, iOS et Android.",
     "Language": "Langue",
     " Local preview allowance resets when the dev server restarts.": " Le quota de l’aperçu local est réinitialisé au redémarrage du serveur.",
     " · Local preview": " · Aperçu local",
@@ -796,6 +802,9 @@ const translations = {
     "You’ve used today’s 3 free AI analyses. Upgrade for more, or use manual logging. Free access resets at midnight UTC.": "Vous avez utilisé les 3 analyses IA gratuites du jour. Abonnez-vous pour en obtenir plus ou utilisez la saisie manuelle. Le quota est réinitialisé à minuit UTC."
   },
   "de": {
+    "✓ Unlimited manual logging": "✓ Unbegrenzte manuelle Einträge",
+    "Start tracking free": "Kostenlos mit dem Tracking starten",
+    "Get 3 free AI meal analyses per day on the web, unlimited manual logging, and no account required. Upgrade for more AI analyses. A subscription works with the same account on web, iOS, and Android.": "Erhalte täglich 3 kostenlose KI-Mahlzeitanalysen im Web und unbegrenzte manuelle Einträge – ohne Konto. Mit einem Abo erhältst du mehr KI-Analysen. Das Abo funktioniert mit demselben Konto im Web sowie auf iOS und Android.",
     "Language": "Sprache",
     " Local preview allowance resets when the dev server restarts.": " Das lokale Testkontingent wird beim Neustart des Servers zurückgesetzt.",
     " · Local preview": " · Lokale Vorschau",

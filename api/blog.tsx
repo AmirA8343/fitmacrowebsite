@@ -9,6 +9,11 @@ type Article = Translation & { published_at: string; translations?: Partial<Reco
 const origin = "https://www.fitmacro.ca";
 const ios = "https://apps.apple.com/us/app/fitmacro-ai-calorie-counter/id6787710350";
 const android = "https://play.google.com/store/apps/details?id=com.fitmacrotechnologies.fitmacro";
+const webOffer = {
+  en: { path: '/free-ai-calorie-counter', action: 'Start tracking free on the web', text: 'Get 3 free AI meal analyses per day on the web, unlimited manual logging, and no account required. Upgrade for more AI analyses.' },
+  es: { path: '/es/contador-calorias-ia-gratis', action: 'Empieza a registrar gratis en la web', text: 'Obtén 3 análisis de comidas con IA gratis al día en la web, registro manual ilimitado y sin necesidad de crear una cuenta. Suscríbete para obtener más análisis con IA.' },
+  fr: { path: '/fr/compteur-calories-ia-gratuit', action: 'Commencez à suivre gratuitement sur le web', text: 'Profitez de 3 analyses de repas IA gratuites par jour sur le web, de la saisie manuelle illimitée et sans compte obligatoire. Abonnez-vous pour obtenir plus d’analyses IA.' },
+};
 const labels = {
   en: { language: "Article language", articles: "Articles", heading: "FitMacro guides", intro: "Practical nutrition, calorie tracking and healthy habit guides.", all: "All articles", download: "Track your nutrition with FitMacro", ios: "Download for iPhone", android: "Get it on Android", empty: "No articles have been published yet." },
   es: { language: "Idioma del artículo", articles: "Artículos", heading: "Guías de FitMacro", intro: "Guías prácticas de nutrición, seguimiento de calorías y hábitos saludables.", all: "Todos los artículos", download: "Registra tu nutrición con FitMacro", ios: "Descargar para iPhone", android: "Obtener para Android", empty: "Todavía no hay artículos publicados." },
@@ -30,7 +35,8 @@ function ArticleBody({ body }: { body: string }) {
 
 function DownloadCard({ locale }: { locale: Locale }) {
   const copy = labels[locale];
-  return <aside className="download"><strong>{copy.download}</strong><div><a href={ios} rel="noopener"> {copy.ios}</a><a href={android} rel="noopener">▶ {copy.android}</a></div></aside>;
+  const offer = webOffer[locale];
+  return <aside className="download"><strong>{copy.download}</strong><p>{offer.text}</p><div><a href={offer.path}>{offer.action}</a><a href={ios} rel="noopener"> {copy.ios}</a><a href={android} rel="noopener">▶ {copy.android}</a></div></aside>;
 }
 
 function LanguageLinks({ locale, alternates }: { locale: Locale; alternates: Partial<Record<Locale, string>> }) {
@@ -74,7 +80,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!slug) {
       const cards = published.flatMap((article) => { const content = localized(article, locale); return content ? [{ article, content }] : []; });
       const canonical = `${origin}${path(locale)}`;
-      const body = <Page locale={locale} title={`${copy.heading} | FitMacro`} description={copy.intro} canonical={canonical} alternates={{ en: `${origin}${path("en")}`, es: `${origin}${path("es")}`, fr: `${origin}${path("fr")}` }}><h1>{copy.heading}</h1><p className="intro">{copy.intro}</p><section className="grid">{cards.length ? cards.map(({ article, content }) => <article className="card" key={content.slug}><h2><a href={path(locale, content.slug)}>{content.title}</a></h2><p>{content.description}</p><time>{new Date(article.published_at).toLocaleDateString(locale, { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" })}</time></article>) : <p>{copy.empty}</p>}</section></Page>;
+      const body = <Page locale={locale} title={`${copy.heading} | FitMacro`} description={copy.intro} canonical={canonical} alternates={{ en: `${origin}${path("en")}`, es: `${origin}${path("es")}`, fr: `${origin}${path("fr")}` }}><h1>{copy.heading}</h1><p className="intro">{copy.intro}</p><section className="grid">{cards.length ? cards.map(({ article, content }) => <article className="card" key={content.slug}><h2><a href={path(locale, content.slug)}>{content.title}</a></h2><p>{content.description}</p><time>{new Date(article.published_at).toLocaleDateString(locale, { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" })}</time></article>) : <p>{copy.empty}</p>}</section><DownloadCard locale={locale}/></Page>;
       if (!cards.length) res.setHeader("X-Robots-Tag", "noindex");
       return res.status(200).setHeader("Content-Type", "text/html; charset=utf-8").send(req.method === "HEAD" ? "" : html(body));
     }
