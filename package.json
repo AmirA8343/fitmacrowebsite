@@ -8,7 +8,7 @@
     "build:dashboard": "tsc --project dashboard/tsconfig.json && node scripts/build-dashboard.mjs",
     "dev:dashboard": "node scripts/build-dashboard.mjs --serve",
     "test:dashboard": "node scripts/test-dashboard.mjs && node scripts/test-nutrition.mjs && node scripts/test-meal-result.mjs && node scripts/test-billing.mjs && node scripts/test-media.mjs && node scripts/test-i18n.mjs",
-    "test:server": "node scripts/test-server-modules.mjs && node scripts/test-blog-bundle.mjs",
+    "test:server": "node scripts/test-server-modules.mjs && node scripts/test-blog-bundle.mjs && node scripts/test-published-articles.mjs",
     "test:seo": "node scripts/test-dashboard-seo.mjs"
   },
   "dependencies": {
