@@ -8,7 +8,9 @@ for (const route of required) if (!config.rewrites.some((item) => item.source ==
 const root = new URL("../", import.meta.url);
 const output = new URL("../public/", import.meta.url);
 const staticExtensions = new Set([".html", ".xml", ".txt", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".ico", ".webmanifest"]);
-await rm(output, { recursive: true, force: true });
+// public/blog and public/images/articles contain owner-reviewed GitHub publications.
+// Clean only generated dashboard assets; never remove authored public content.
+await rm(new URL("dashboard/", output), { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 for (const entry of await readdir(root, { withFileTypes: true })) {
   if (entry.isFile() && staticExtensions.has(extname(entry.name).toLowerCase())) await cp(new URL(entry.name, root), new URL(entry.name, output));
