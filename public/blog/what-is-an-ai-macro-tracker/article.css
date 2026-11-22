@@ -1,0 +1,8 @@
+.fitadengine-article{min-width:0;color:inherit;font-family:inherit;overflow-wrap:anywhere}
+.fitadengine-article :where(h1){font-size:clamp(2rem,5vw,3rem);line-height:1.15;margin-block:0 1em}
+.fitadengine-article :where(h2){font-size:clamp(1.5rem,3vw,2rem);line-height:1.3;margin-block:1.8em .7em}
+.fitadengine-article :where(h3){font-size:1.25em;line-height:1.4;margin-block:1.5em .6em}
+.fitadengine-article :where(ul){padding-inline-start:1.5em;margin-block:1em}
+.fitadengine-article :where(figure){margin:2em 0}
+.fitadengine-article :where(img){display:block;max-width:100%;height:auto}
+.fitadengine-article :where(figcaption){font-size:.875em;margin-block-start:.5em}
