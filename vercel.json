@@ -35,6 +35,9 @@
   "functions": {
     "api/analyze.ts": {
       "maxDuration": 60
+    },
+    "api/blog.tsx": {
+      "includeFiles": "package.json"
     }
   }
 }
